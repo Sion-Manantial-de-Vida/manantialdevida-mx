@@ -1,47 +1,60 @@
 # Iglesia Sion Manantial de Vida — Sitio Web
 
-Sitio web oficial de la **Iglesia Sion Manantial de Vida** (Toluca / Metepec, Estado de México).
+Aplicación del sitio web oficial de la **Iglesia Sion Manantial de Vida** (Toluca / Metepec,
+Estado de México).
 
-- 🌐 Dominio: `manantialdevida.mx`
+- 🌐 En vivo: **https://manantialdevida.mx**
 - ✉️ Contacto: sion@manantialvida.mx
-- 🏔️ "Un manantial de vida para las naciones"
 
-## Estado del proyecto
+> **Este repo es solo para la aplicación.** El contexto de la iglesia, decisiones, bitácora
+> y conocimiento general viven en el repo privado `sion-knowledge-base`.
 
-✅ Diseño implementado (sitio estático generado con Claude Design). En revisión de contenido.
+## Arquitectura
+- **Frontend:** sitio estático (HTML + CSS + JavaScript). Sin framework.
+- **Hosting:** Vercel (auto-deploy al hacer push a `main`).
+- **Base de datos / Auth:** Supabase (proyecto `wisgwbfzyusdwlotspqn`).
+- **Dominio:** `manantialdevida.mx` (DNS en Squarespace; correo Google Workspace).
 
-## Cómo ver el sitio
-
-Es un sitio **estático** (HTML + CSS + JavaScript, sin servidor). Para verlo:
-
-- **Lo más fácil:** abre `index.html` con doble clic (se abre en tu navegador).
-- El panel de administración está en `admin.html` (se entra desde el botón "Acceso Pastoral").
-
-## Estructura de archivos
-
+## Estructura
 | Archivo / carpeta | Qué es |
 |---|---|
-| `index.html` | Página principal pública (inicio, servicios, nosotros, eventos, etc.) |
+| `index.html` | Sitio público (inicio, servicios, nosotros, eventos, oración, etc.) |
 | `admin.html` | Panel de administración ("Acceso Pastoral") |
-| `styles.css` | Estilos del sitio público |
-| `admin.css` | Estilos del panel de administración |
-| `app.js` | Lógica del sitio público |
-| `public-extra.js`, `public-events.js` | Funciones extra del sitio (eventos, calendario) |
-| `admin.js` | Lógica del panel de administración |
-| `site-data.js` | Contenido editable, compartido entre el sitio y el panel (usa el navegador) |
-| `assets/` | Imágenes: logos, foto del hero (montaña), anuncios |
-| `.env.local` | 🔒 Tokens privados (NUNCA se sube a GitHub) |
+| `styles.css` / `admin.css` | Estilos del sitio / del panel |
+| `app.js` | Lógica del sitio público (incl. formulario de oración y login) |
+| `public-extra.js`, `public-events.js` | Render de eventos, anuncios, blog, etc. |
+| `public-sync.js` | Trae contenido desde Supabase al sitio público |
+| `admin.js` | Lógica del panel (CRUD de cada sección) |
+| `site-data.js` | Datos por defecto + helpers de lectura/escritura |
+| `supabase-config.js` | Conexión a Supabase (clave pública, segura) |
+| `scripts/db.sh` | Correr SQL en Supabase desde la terminal |
+| `assets/` | Imágenes (logos, hero, anuncios) |
+| `.env.local` | 🔒 Tokens privados (NUNCA se sube) · ver `.env.local.example` |
 
-## Notas técnicas / pendientes
+## Cómo trabajar
 
-- Las imágenes de `assets/` son grandes (~32 MB en total). Conviene **optimizarlas**
-  (comprimir a tamaño web) antes de publicar, para que el sitio cargue rápido en celular.
-- El contenido se guarda por ahora en el navegador (localStorage) vía `site-data.js`.
-  Para que las ediciones del panel sean permanentes y compartidas, más adelante habrá
-  que conectar una base de datos / backend.
-- El login del panel es por ahora una maqueta (sin autenticación real). Antes de publicar
-  el panel hay que conectar un sistema de acceso seguro.
-- Falta elegir hosting (GitHub Pages o Cloudflare Pages, ambos gratuitos) y conectar el
-  dominio `manantialdevida.mx`.
+```bash
+# Cargar tokens
+set -a; source .env.local; set +a
 
-> Contexto, decisiones y memoria del proyecto: ver el repositorio `sion-knowledge-base`.
+# Ver el sitio localmente
+python3 -m http.server 8000   # luego abrir http://127.0.0.1:8000
+
+# Correr SQL en Supabase (sin el editor web)
+./scripts/db.sh "select * from public.events;"
+
+# Ver despliegues de Vercel
+vercel ls project-ld1xd --token "$VERCEL_TOKEN"
+```
+
+Publicar: hacer `git push` a `main` → Vercel despliega solo.
+
+## Base de datos (modelo normalizado)
+Tablas: `content`, `services`, `sermons`, `events`, `announcements`, `blog_posts`, `team`,
+`social_feed`, `prayer_requests`. Seguridad RLS: el público lee lo publicado y envía
+peticiones de oración; solo el administrador autenticado edita.
+Patrón de referencia ya conectado: **Eventos** (`events`).
+
+⚠️ En Supabase JS, una consulta solo se ejecuta con `await` o `.then()`.
+
+> Estado del proyecto, decisiones y próximos pasos: ver el repo `sion-knowledge-base`.
