@@ -93,5 +93,25 @@
     try { localStorage.setItem(KEY, JSON.stringify(data)); } catch (e) {}
   }
 
-  window.SionSite = { DEFAULTS, load, save, KEY };
+  /* ---- Lectura/escritura en Supabase (la nube) ---- */
+  async function pullRemote() {
+    if (!window.sbClient) return null;
+    try {
+      const { data, error } = await window.sbClient
+        .from('site_data').select('data').eq('id', 1).maybeSingle();
+      if (error || !data) return null;
+      return data.data || null;
+    } catch (e) { return null; }
+  }
+  async function pushRemote(obj) {
+    if (!window.sbClient) return { ok: false };
+    try {
+      const { error } = await window.sbClient
+        .from('site_data')
+        .upsert({ id: 1, data: obj, updated_at: new Date().toISOString() });
+      return { ok: !error, error };
+    } catch (e) { return { ok: false, error: e }; }
+  }
+
+  window.SionSite = { DEFAULTS, load, save, KEY, pullRemote, pushRemote };
 })();

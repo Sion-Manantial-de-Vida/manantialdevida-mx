@@ -224,7 +224,7 @@
   const form = document.getElementById('prayerForm');
   const success = document.getElementById('prayerSuccess');
   if (form) {
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = form.querySelector('#pf-name');
       const msg = form.querySelector('#pf-msg');
@@ -234,6 +234,19 @@
         else { f.style.borderColor = ''; }
       });
       if (!ok) return;
+      // Guardar la petición en Supabase (si está disponible)
+      const tipoEl = form.querySelector('input[name="tipo"]:checked');
+      const contactoEl = form.querySelector('#pf-mail');
+      if (window.sbClient) {
+        try {
+          await window.sbClient.from('prayer_requests').insert({
+            tipo: tipoEl ? tipoEl.value : 'peticion',
+            nombre: name.value.trim(),
+            contacto: contactoEl ? contactoEl.value.trim() : '',
+            mensaje: msg.value.trim()
+          });
+        } catch (err) { console.warn('[Sion] No se pudo guardar la petición:', err); }
+      }
       form.style.display = 'none';
       success.classList.add('show');
     });
@@ -287,7 +300,7 @@
       alert('Te enviaremos un enlace de recuperación al correo registrado. (Demostración)');
     });
 
-    loginForm.addEventListener('submit', (e) => {
+    loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       loginError.classList.remove('show');
       if (!mailInput.value.trim() || !passInput.value.trim()) {
@@ -297,15 +310,27 @@
       }
       loginSubmit.classList.add('loading');
       loginSubmit.disabled = true;
-      // Demostración: simulamos verificación de credenciales.
-      setTimeout(() => {
+      const fail = (texto) => {
+        loginError.querySelector('span').textContent = texto;
+        loginError.classList.add('show');
+        loginSubmit.classList.remove('loading');
+        loginSubmit.disabled = false;
+      };
+      try {
+        if (!window.sbClient) { fail('No se pudo conectar. Inténtalo más tarde.'); return; }
+        const { error } = await window.sbClient.auth.signInWithPassword({
+          email: mailInput.value.trim(),
+          password: passInput.value
+        });
+        if (error) { fail('Correo o contraseña incorrectos. Inténtalo de nuevo.'); return; }
         try {
           if (document.getElementById('lg-remember').checked) localStorage.setItem('sionAdminMail', mailInput.value.trim());
           else localStorage.removeItem('sionAdminMail');
-          sessionStorage.setItem('sionAdminAuth', '1');
         } catch (e) {}
         window.location.href = 'admin.html';
-      }, 1100);
+      } catch (err) {
+        fail('No se pudo conectar. Inténtalo más tarde.');
+      }
     });
   }
 

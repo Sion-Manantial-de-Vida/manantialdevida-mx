@@ -5,11 +5,17 @@
 (function () {
   'use strict';
 
-  /* ---------- Sesión ---------- */
-  // En el prototipo, si no hay sesión venimos directo del login igualmente.
-  try {
-    if (!sessionStorage.getItem('sionAdminAuth')) sessionStorage.setItem('sionAdminAuth', '1');
-  } catch (e) {}
+  /* ---------- Sesión (Supabase Auth) ---------- */
+  // Si no hay sesión válida, regresar al sitio público.
+  // La seguridad real la imponen las reglas (RLS) de la base de datos:
+  // sin sesión no se pueden leer/editar los datos protegidos.
+  (async function guardSession() {
+    if (!window.sbClient) return; // respaldo: modo local
+    try {
+      const { data } = await window.sbClient.auth.getSession();
+      if (!data || !data.session) window.location.replace('index.html');
+    } catch (e) {}
+  })();
 
   const $ = (s, c) => (c || document).querySelector(s);
   const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
@@ -74,7 +80,13 @@
   if (Array.isArray(store.social)) data.social = store.social;
   function persist() {
     if (!window.SionSite) return;
-    window.SionSite.save({ content: data.content, eventos: data.eventos, anuncios: data.anuncios, blog: data.blog, social: data.social });
+    const payload = { content: data.content, eventos: data.eventos, anuncios: data.anuncios, blog: data.blog, social: data.social };
+    window.SionSite.save(payload);               // copia local (cache)
+    if (window.SionSite.pushRemote) {            // guardar en la nube (Supabase)
+      window.SionSite.pushRemote(payload).then(function (r) {
+        if (r && r.ok === false) console.warn('[Sion] No se pudo guardar en la nube:', r.error);
+      });
+    }
   }
 
   /* ============================================================
@@ -123,7 +135,11 @@
       title: 'Cerrar sesión',
       msg: '¿Deseas salir del panel administrativo?',
       btn: 'Cerrar sesión', danger: false,
-      onYes: () => { try { sessionStorage.removeItem('sionAdminAuth'); } catch (e) {} window.location.href = 'index.html'; }
+      onYes: async () => {
+        try { if (window.sbClient) await window.sbClient.auth.signOut(); } catch (e) {}
+        try { sessionStorage.removeItem('sionAdminAuth'); } catch (e) {}
+        window.location.href = 'index.html';
+      }
     });
   });
 
@@ -693,14 +709,20 @@
         </div>
         <input class="req-note" data-note="${p.id}" value="${esc(p.nota)}" placeholder="Nota interna privada…" />
       </div>`).join('');
+    const updateReq = (id, fields) => {
+      if (window.sbClient) window.sbClient.from('prayer_requests').update(fields).eq('id', id);
+    };
     $$('[data-set-state]').forEach(b => b.addEventListener('click', () => {
       const p = data.peticiones.find(x => x.id === b.dataset.setState); p.estado = b.dataset.state; renderPeticiones(); toast('Estado: ' + stateLabel[p.estado], 'ok');
+      updateReq(p.id, { estado: p.estado });
     }));
     $$('[data-conf]').forEach(c => c.addEventListener('change', () => {
       const p = data.peticiones.find(x => x.id === c.dataset.conf); p.conf = c.checked; renderPeticiones(); toast(p.conf ? 'Marcada confidencial' : 'Confidencialidad quitada', 'ok');
+      updateReq(p.id, { confidencial: p.conf });
     }));
     $$('[data-note]').forEach(i => i.addEventListener('change', () => {
       const p = data.peticiones.find(x => x.id === i.dataset.note); p.nota = i.value; toast('Nota guardada', 'ok');
+      updateReq(p.id, { nota: i.value });
     }));
     updateBadge();
   }
@@ -723,4 +745,46 @@
   renderPeticiones();
   renderBlog();
   renderSocial();
+
+  /* ============================================================
+     CARGA DESDE LA NUBE (Supabase)
+     ============================================================ */
+  // 1) Trae las peticiones de oración reales recibidas desde el sitio.
+  (async function loadPeticionesRemote() {
+    if (!window.sbClient) return;
+    try {
+      const { data: rows, error } = await window.sbClient
+        .from('prayer_requests').select('*').order('created_at', { ascending: false });
+      if (error || !rows) return;
+      const tipoMap = { peticion: 'Petición', gracias: 'Acción de gracias' };
+      data.peticiones = rows.map(r => ({
+        id: r.id,
+        nombre: r.nombre || 'Anónimo',
+        tipo: tipoMap[r.tipo] || 'Petición',
+        msg: r.mensaje || '',
+        estado: r.estado || 'nueva',
+        conf: !!r.confidencial,
+        nota: r.nota || ''
+      }));
+      renderPeticiones();
+    } catch (e) { /* sin conexión: se quedan los datos locales */ }
+  })();
+
+  // 2) Trae el contenido más reciente del sitio (si fue editado en otro dispositivo).
+  (async function syncContentRemote() {
+    if (!window.SionSite || !window.SionSite.pullRemote) return;
+    try {
+      const remote = await window.SionSite.pullRemote();
+      if (!remote) return;
+      const remoteStr = JSON.stringify(remote);
+      const localStr = localStorage.getItem(window.SionSite.KEY);
+      if (remoteStr !== localStr) {
+        localStorage.setItem(window.SionSite.KEY, remoteStr);
+        if (!sessionStorage.getItem('sionAdminSyncedOnce')) {
+          sessionStorage.setItem('sionAdminSyncedOnce', '1');
+          location.reload();
+        }
+      }
+    } catch (e) {}
+  })();
 })();
