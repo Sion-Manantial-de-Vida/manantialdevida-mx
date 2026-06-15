@@ -430,7 +430,7 @@
   /* ---- Eventos en Supabase (tabla 'events') ---- */
   function evtRow(e) { return { id: e.id, titulo: e.titulo, fecha: e.fecha, hora: e.hora, lugar: e.lugar, descripcion: e.desc, estado: e.estado, reg: !!e.reg }; }
   function eventsUpsert(e) { if (window.sbClient) window.sbClient.from('events').upsert(evtRow(e)).then(r => { if (r.error) console.warn('[Sion] evento no guardado en la nube:', r.error.message); }); }
-  function eventsDelete(id) { if (window.sbClient) window.sbClient.from('events').delete().eq('id', id); }
+  function eventsDelete(id) { if (window.sbClient) window.sbClient.from('events').delete().eq('id', id).then(r => { if (r.error) console.warn('[Sion] evento no borrado en la nube:', r.error.message); }); }
   async function loadEventsRemote() {
     if (!window.sbClient) return;
     try {
@@ -724,7 +724,7 @@
         <input class="req-note" data-note="${p.id}" value="${esc(p.nota)}" placeholder="Nota interna privada…" />
       </div>`).join('');
     const updateReq = (id, fields) => {
-      if (window.sbClient) window.sbClient.from('prayer_requests').update(fields).eq('id', id);
+      if (window.sbClient) window.sbClient.from('prayer_requests').update(fields).eq('id', id).then(r => { if (r.error) console.warn('[Sion] petición no actualizada:', r.error.message); });
     };
     $$('[data-set-state]').forEach(b => b.addEventListener('click', () => {
       const p = data.peticiones.find(x => x.id === b.dataset.setState); p.estado = b.dataset.state; renderPeticiones(); toast('Estado: ' + stateLabel[p.estado], 'ok');
