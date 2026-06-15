@@ -1,26 +1,48 @@
 /* ============================================================
    Sincroniza el contenido del sitio público desde Supabase.
-   Si el pastor editó el contenido en el panel, aquí se trae y se
-   refresca la página una sola vez para mostrarlo.
-   Si no hay nada guardado en Supabase, el sitio usa el contenido
-   por defecto (todo sigue funcionando).
+   - Otras secciones: del "paquete" site_data (paso intermedio).
+   - EVENTOS: de la tabla normalizada 'events' (fuente de verdad).
+   Si algo cambió respecto a lo que ya está cacheado, refresca la
+   página una sola vez para mostrarlo. Si Supabase no responde, el
+   sitio sigue funcionando con el contenido por defecto.
    ============================================================ */
 (function () {
   'use strict';
-  if (!window.sbClient || !window.SionSite || !window.SionSite.pullRemote) return;
+  if (!window.sbClient || !window.SionSite) return;
 
-  window.SionSite.pullRemote().then(function (remote) {
-    if (!remote) return; // aún no hay contenido editado en la nube
+  (async function sync() {
+    const base = window.SionSite.load(); // por defecto + caché local
+
+    // Contenido general (paquete site_data), si existe
     try {
-      var remoteStr = JSON.stringify(remote);
-      var localStr = localStorage.getItem(window.SionSite.KEY);
-      if (remoteStr !== localStr) {
-        localStorage.setItem(window.SionSite.KEY, remoteStr);
+      if (window.SionSite.pullRemote) {
+        const remote = await window.SionSite.pullRemote();
+        if (remote && typeof remote === 'object') Object.assign(base, remote);
+      }
+    } catch (e) {}
+
+    // EVENTOS desde la tabla normalizada
+    try {
+      const { data: rows, error } = await window.sbClient
+        .from('events').select('*').order('fecha', { ascending: true });
+      if (!error && Array.isArray(rows)) {
+        base.eventos = rows.map(r => ({
+          id: r.id, titulo: r.titulo, fecha: r.fecha, hora: r.hora,
+          lugar: r.lugar, desc: r.descripcion, estado: r.estado, reg: !!r.reg
+        }));
+      }
+    } catch (e) {}
+
+    // Si cambió respecto a lo cacheado, guardar y refrescar una vez
+    try {
+      const str = JSON.stringify(base);
+      if (str !== localStorage.getItem(window.SionSite.KEY)) {
+        localStorage.setItem(window.SionSite.KEY, str);
         if (!sessionStorage.getItem('sionSyncedOnce')) {
           sessionStorage.setItem('sionSyncedOnce', '1');
           location.reload();
         }
       }
-    } catch (e) { /* sin acceso a storage: ignorar */ }
-  });
+    } catch (e) {}
+  })();
 })();

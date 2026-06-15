@@ -427,6 +427,19 @@
      EVENTOS
      ============================================================ */
   const estadoPill = { proximo: '<span class="pill pill-green"><span class="dot"></span>Próximo</span>', pasado: '<span class="pill pill-slate">Pasado</span>', borrador: '<span class="pill pill-amber">Borrador</span>' };
+  /* ---- Eventos en Supabase (tabla 'events') ---- */
+  function evtRow(e) { return { id: e.id, titulo: e.titulo, fecha: e.fecha, hora: e.hora, lugar: e.lugar, descripcion: e.desc, estado: e.estado, reg: !!e.reg }; }
+  function eventsUpsert(e) { if (window.sbClient) window.sbClient.from('events').upsert(evtRow(e)).then(r => { if (r.error) console.warn('[Sion] evento no guardado en la nube:', r.error.message); }); }
+  function eventsDelete(id) { if (window.sbClient) window.sbClient.from('events').delete().eq('id', id); }
+  async function loadEventsRemote() {
+    if (!window.sbClient) return;
+    try {
+      const { data: rows, error } = await window.sbClient.from('events').select('*').order('fecha', { ascending: true });
+      if (error || !rows) return;
+      data.eventos = rows.map(r => ({ id: r.id, titulo: r.titulo, fecha: r.fecha, hora: r.hora, lugar: r.lugar, desc: r.descripcion, estado: r.estado, reg: !!r.reg }));
+      renderEventos();
+    } catch (e) {}
+  }
   function renderEventos() {
     const q = $('#evtSearch').value.toLowerCase(), fe = $('#evtEstado').value;
     const list = data.eventos.filter(e => (!q || e.titulo.toLowerCase().includes(q)) && (!fe || e.estado === fe));
@@ -448,7 +461,7 @@
       </div>`).join('');
     $$('[data-edit-e]').forEach(b => b.addEventListener('click', () => openEvtForm(b.dataset.editE)));
     $$('[data-del-e]').forEach(b => b.addEventListener('click', () => {
-      confirmAction({ title: '¿Eliminar evento?', msg: 'Esta acción no se puede deshacer.', onYes: () => { data.eventos = data.eventos.filter(x => x.id !== b.dataset.delE); persist(); renderEventos(); toast('Evento eliminado', 'ok'); } });
+      confirmAction({ title: '¿Eliminar evento?', msg: 'Esta acción no se puede deshacer.', onYes: () => { const delId = b.dataset.delE; data.eventos = data.eventos.filter(x => x.id !== delId); persist(); eventsDelete(delId); renderEventos(); toast('Evento eliminado', 'ok'); } });
     }));
   }
   function openEvtForm(id) {
@@ -469,8 +482,9 @@
     `, () => {
       const t = val('titulo'); if (!t) { toast('Escribe un título', 'warn'); return; }
       const obj = { titulo: t, fecha: val('fecha'), hora: val('hora'), lugar: val('lugar'), estado: val('estado'), reg: chk('reg'), desc: val('desc') };
-      if (id) Object.assign(e, obj); else data.eventos.unshift(Object.assign({ id: 'e' + Date.now() }, obj));
-      persist(); renderEventos(); closeModal(formModal); toast('Evento guardado', 'ok');
+      let saved;
+      if (id) { Object.assign(e, obj); saved = e; } else { saved = Object.assign({ id: 'e' + Date.now() }, obj); data.eventos.unshift(saved); }
+      persist(); eventsUpsert(saved); renderEventos(); closeModal(formModal); toast('Evento guardado', 'ok');
     });
   }
   $('#addEvt').addEventListener('click', () => openEvtForm(null));
@@ -769,6 +783,9 @@
       renderPeticiones();
     } catch (e) { /* sin conexión: se quedan los datos locales */ }
   })();
+
+  // 1b) Trae los eventos reales desde la tabla 'events'.
+  loadEventsRemote();
 
   // 2) Trae el contenido más reciente del sitio (si fue editado en otro dispositivo).
   (async function syncContentRemote() {
