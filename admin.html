@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Panel Administrativo · Iglesia Sion Manantial de Vida</title>
+<link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+
+<!-- ===================== SIDEBAR ===================== -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-brand">
+    <img src="assets/logo-cream.png" alt="Logo" />
+    <span class="nm">Iglesia Sion<small>Panel Administrativo</small></span>
+  </div>
+  <nav class="sb-nav" id="sbNav">
+    <button class="sb-link active" data-view="dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+      Dashboard
+    </button>
+    <div class="sb-sec">Contenido del sitio</div>
+    <button class="sb-link" data-view="info">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/></svg>
+      Información de la Iglesia
+    </button>
+    <button class="sb-link" data-view="horarios">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      Horarios
+    </button>
+    <button class="sb-link" data-view="sermones">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 5h12v14H3z"/><path d="M15 7h6v10h-6"/><path d="M7 9h4M7 13h4"/></svg>
+      Sermones
+    </button>
+    <button class="sb-link" data-view="eventos">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>
+      Eventos
+    </button>
+    <button class="sb-link" data-view="anuncios">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l16-7v16L3 13z"/><path d="M3 11v2a2 2 0 0 0 2 2h2"/></svg>
+      Anuncios
+    </button>
+    <button class="sb-link" data-view="blog">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M19 19H6a2 2 0 0 0-2 2"/><path d="M8 7h7M8 11h7"/></svg>
+      Devocionales y Blog
+    </button>
+    <button class="sb-link" data-view="redes">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+      Redes / Feed
+    </button>
+    <div class="sb-sec">Personas</div>
+    <button class="sb-link" data-view="peticiones">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Peticiones de Oración
+      <span class="sb-badge" id="reqBadge">3</span>
+    </button>
+  </nav>
+  <div class="sb-foot">
+    <a class="sb-link" href="index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+      Ver sitio público
+    </a>
+    <button class="sb-link sb-logout" id="logoutBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>
+      Cerrar sesión
+    </button>
+  </div>
+</aside>
+<div class="sb-backdrop" id="sbBackdrop"></div>
+
+<!-- ===================== MAIN ===================== -->
+<div class="main">
+  <header class="topbar">
+    <button class="burger" id="sbBurger" aria-label="Menú"><span></span></button>
+    <div class="tb-titles">
+      <h1 id="pageTitle">Dashboard</h1>
+      <p id="pageSub">Resumen general de la iglesia</p>
+    </div>
+    <div class="tb-right">
+      <span class="https-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>Sesión segura</span></span>
+      <a class="tb-view" href="index.html" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg><span>Ver sitio</span></a>
+      <div class="tb-avatar">P</div>
+      <div class="tb-meta"><strong>Pastor</strong><span>Administrador</span></div>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <!-- ============ DASHBOARD ============ -->
+    <section class="view active" id="view-dashboard">
+      <div class="metrics">
+        <div class="metric feature">
+          <div class="m-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+          <div class="m-val">Dom 11:00</div>
+          <div class="m-lbl">Próximo servicio · Servicio General</div>
+        </div>
+        <div class="metric">
+          <div class="m-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 5h12v14H3z"/><path d="M15 7h6v10h-6"/></svg></div>
+          <div class="m-val">24</div>
+          <div class="m-lbl">Sermones publicados</div>
+        </div>
+        <div class="metric">
+          <div class="m-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg></div>
+          <div class="m-val">3</div>
+          <div class="m-lbl">Eventos próximos</div>
+        </div>
+        <div class="metric">
+          <div class="m-tag"><span class="pill pill-sand"><span class="dot"></span>3 nuevas</span></div>
+          <div class="m-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+          <div class="m-val">12</div>
+          <div class="m-lbl">Peticiones de oración</div>
+        </div>
+      </div>
+
+      <div class="dash-grid">
+        <div class="card card-pad">
+          <div class="row-between" style="margin-bottom:6px;">
+            <h3 class="sec-title">Actividad reciente</h3>
+            <span class="pill pill-slate">Últimos 7 días</span>
+          </div>
+          <div class="activity" id="activityList"></div>
+        </div>
+        <div class="card card-pad">
+          <h3 class="sec-title" style="margin-bottom:14px;">Accesos rápidos</h3>
+          <div class="quick-grid">
+            <button class="quick" data-quick="sermones"><span class="q-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg></span><span class="q-t">Nuevo sermón</span></button>
+            <button class="quick" data-quick="eventos"><span class="q-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg></span><span class="q-t">Nuevo evento</span></button>
+            <button class="quick" data-quick="anuncios"><span class="q-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l16-7v16L3 13z"/></svg></span><span class="q-t">Nuevo anuncio</span></button>
+            <button class="quick" data-quick="peticiones"><span class="q-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><span class="q-t">Ver peticiones</span></button>
+          </div>
+          <div class="divider"></div>
+          <h3 class="sec-title" style="margin-bottom:10px; font-size:1rem;">Estado del sitio</h3>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <div class="row-between"><span class="muted">Conexión</span><span class="pill pill-green"><span class="dot"></span>HTTPS activo</span></div>
+            <div class="row-between"><span class="muted">Transmisión dominical</span><span class="pill pill-navy">Programada</span></div>
+            <div class="row-between"><span class="muted">Anuncio en portada</span><span class="pill pill-amber">1 activo</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ INFORMACIÓN ============ -->
+    <section class="view" id="view-info">
+      <form id="infoForm">
+        <div class="card card-pad" style="margin-bottom:18px;">
+          <h3 class="sec-title" style="margin-bottom:6px;">Portada (Hero)</h3>
+          <p class="muted" style="font-size:.85rem; margin-bottom:16px;">Estos textos se muestran en la parte superior de la página de inicio.</p>
+          <div class="grid-2">
+            <div class="field"><label>Ubicación (texto pequeño)</label><input data-c="hero.eyebrow" /></div>
+            <div class="field"><label>Versículo — referencia</label><input data-c="hero.verseRef" /></div>
+          </div>
+          <div class="field"><label>Título principal</label><input data-c="hero.title" /></div>
+          <div class="field"><label>Subtítulo / lema</label><input data-c="hero.subtitle" /></div>
+          <div class="field"><label>Versículo</label><textarea data-c="hero.verse"></textarea></div>
+        </div>
+
+        <div class="card card-pad" style="margin-bottom:18px;">
+          <h3 class="sec-title" style="margin-bottom:16px;">Quiénes somos</h3>
+          <div class="field"><label>Descripción de la iglesia</label><textarea data-c="nosotros.desc"></textarea></div>
+          <div class="grid-2">
+            <div class="field"><label>Misión</label><textarea data-c="mision"></textarea></div>
+            <div class="field"><label>Visión</label><textarea data-c="vision"></textarea></div>
+          </div>
+          <div class="field"><label>Nuestra historia</label><textarea data-c="historia"></textarea></div>
+          <div class="field"><label>Biografía de los pastores</label><textarea data-c="pastor.bio" style="min-height:150px;"></textarea></div>
+          <div class="grid-2">
+            <div class="field"><label>Foto de los pastores</label><div id="pastorPhotoPicker"></div></div>
+            <div class="field"><label>Tamaño de la foto</label><select data-c="pastor.photoSize"><option value="pequena">Pequeña</option><option value="mediana">Mediana</option><option value="grande">Grande</option></select><span class="hint">Controla el ancho de la foto en la tarjeta pública.</span></div>
+          </div>
+        </div>
+
+        <div class="card card-pad" style="margin-bottom:18px;">
+          <h3 class="sec-title" style="margin-bottom:6px;">Comunidad · “Nadie debe caminar solo”</h3>
+          <p class="muted" style="font-size:.85rem; margin-bottom:16px;">Encabezado, las tres tarjetas y los objetivos ministeriales.</p>
+          <div class="grid-2">
+            <div class="field"><label>Título de la sección</label><input data-c="comunidad.titulo" /></div>
+            <div class="field"><label>Subtítulo</label><input data-c="comunidad.sub" /></div>
+          </div>
+          <div class="divider"></div>
+          <div class="grid-2">
+            <div class="field"><label>Tarjeta 1 · título</label><input data-c="comunidad.c1.t" /></div>
+            <div class="field"><label>Tarjeta 1 · enlace (texto)</label><input data-c="comunidad.c1.cta" /></div>
+          </div>
+          <div class="field"><label>Tarjeta 1 · descripción</label><textarea data-c="comunidad.c1.d"></textarea></div>
+          <div class="grid-2">
+            <div class="field"><label>Tarjeta 2 · título</label><input data-c="comunidad.c2.t" /></div>
+            <div class="field"><label>Tarjeta 2 · enlace (texto)</label><input data-c="comunidad.c2.cta" /></div>
+          </div>
+          <div class="field"><label>Tarjeta 2 · descripción</label><textarea data-c="comunidad.c2.d"></textarea></div>
+          <div class="grid-2">
+            <div class="field"><label>Tarjeta 3 · título</label><input data-c="comunidad.c3.t" /></div>
+            <div class="field"><label>Tarjeta 3 · enlace (texto)</label><input data-c="comunidad.c3.cta" /></div>
+          </div>
+          <div class="field"><label>Tarjeta 3 · descripción</label><textarea data-c="comunidad.c3.d"></textarea></div>
+          <div class="divider"></div>
+          <div class="field"><label>Objetivos ministeriales · título</label><input data-c="objetivos.titulo" /></div>
+          <div class="grid-2">
+            <div class="field"><label>Objetivo 1</label><input data-c="objetivos.1" /></div>
+            <div class="field"><label>Objetivo 2</label><input data-c="objetivos.2" /></div>
+            <div class="field"><label>Objetivo 3</label><input data-c="objetivos.3" /></div>
+            <div class="field"><label>Objetivo 4</label><input data-c="objetivos.4" /></div>
+            <div class="field"><label>Objetivo 5</label><input data-c="objetivos.5" /></div>
+          </div>
+        </div>
+
+        <div class="card card-pad" style="margin-bottom:18px;">
+          <h3 class="sec-title" style="margin-bottom:6px;">Tu primera vez · ¿Qué esperar?</h3>
+          <p class="muted" style="font-size:.85rem; margin-bottom:16px;">Los cuatro puntos que ve el visitante en la sección “Planifica tu visita”.</p>
+          <div class="grid-2">
+            <div class="field"><label>Punto 1 · título</label><input data-c="expect.1.t" /></div>
+            <div class="field"><label>Punto 1 · descripción</label><input data-c="expect.1.d" /></div>
+            <div class="field"><label>Punto 2 · título</label><input data-c="expect.2.t" /></div>
+            <div class="field"><label>Punto 2 · descripción</label><input data-c="expect.2.d" /></div>
+            <div class="field"><label>Punto 3 · título</label><input data-c="expect.3.t" /></div>
+            <div class="field"><label>Punto 3 · descripción</label><input data-c="expect.3.d" /></div>
+            <div class="field"><label>Punto 4 · título</label><input data-c="expect.4.t" /></div>
+            <div class="field"><label>Punto 4 · descripción</label><input data-c="expect.4.d" /></div>
+          </div>
+        </div>
+
+        <div class="card card-pad" style="margin-bottom:18px;">
+          <h3 class="sec-title" style="margin-bottom:6px;">Cuidado pastoral y oración</h3>
+          <p class="muted" style="font-size:.85rem; margin-bottom:16px;">Los pasos de “¿Cómo funciona?” y el bloque “¿Necesitas hablar con un pastor?”.</p>
+          <div class="grid-2">
+            <div class="field"><label>Paso 1 · título</label><input data-c="oracion.s1.t" /></div>
+            <div class="field"><label>Paso 1 · descripción</label><input data-c="oracion.s1.d" /></div>
+            <div class="field"><label>Paso 2 · título</label><input data-c="oracion.s2.t" /></div>
+            <div class="field"><label>Paso 2 · descripción</label><input data-c="oracion.s2.d" /></div>
+            <div class="field"><label>Paso 3 · título</label><input data-c="oracion.s3.t" /></div>
+            <div class="field"><label>Paso 3 · descripción</label><input data-c="oracion.s3.d" /></div>
+          </div>
+          <div class="field"><label>“¿Necesitas hablar con un pastor?” · título</label><input data-c="oracion.pastor.t" /></div>
+          <div class="field"><label>“¿Necesitas hablar con un pastor?” · descripción</label><input data-c="oracion.pastor.d" /></div>
+        </div>
+
+        <div class="card card-pad" style="margin-bottom:18px;">
+          <h3 class="sec-title" style="margin-bottom:6px;">Afiliación · Zion Fellowship</h3>
+          <p class="muted" style="font-size:.85rem; margin-bottom:16px;">Sección de afiliación internacional en la página pública.</p>
+          <div class="grid-2">
+            <div class="field"><label>Título</label><input data-c="afil.title" /></div>
+            <div class="field"><label>Afiliados desde (fecha)</label><input data-c="afil.date" /></div>
+          </div>
+          <div class="field"><label>Organización / sede</label><input data-c="afil.org" /></div>
+          <div class="field"><label>Descripción / historia de la afiliación</label><textarea data-c="afil.desc"></textarea></div>
+          <div class="field"><label>Enlace al sitio de Zion Fellowship</label><input data-c="afil.link" /></div>
+        </div>
+
+        <div class="card card-pad" style="margin-bottom:18px;">
+          <h3 class="sec-title" style="margin-bottom:16px;">Datos de contacto y redes</h3>
+          <div class="grid-2">
+            <div class="field"><label>Dirección</label><input data-c="contacto.dir" /></div>
+            <div class="field"><label>Correo</label><input data-c="contacto.mail" /></div>
+            <div class="field"><label>Canal de YouTube</label><input data-c="social.youtube" /></div>
+            <div class="field"><label>Página de Facebook</label><input data-c="social.facebook" /></div>
+          </div>
+        </div>
+
+        <div class="card card-pad">
+          <div class="row-between" style="margin-bottom:14px;">
+            <h3 class="sec-title">Equipo pastoral</h3>
+            <button type="button" class="btn btn-ghost btn-sm" id="addTeam"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Agregar</button>
+          </div>
+          <div id="teamList" class="list"></div>
+        </div>
+
+        <div style="position:sticky; bottom:0; padding:16px 0; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+          <span class="muted" style="font-size:.84rem; display:inline-flex; align-items:center; gap:.4em;"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg> Los cambios se reflejan en el sitio público al guardar.</span>
+          <button type="submit" class="btn btn-cta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5 9-11"/></svg>Guardar cambios</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ============ HORARIOS ============ -->
+    <section class="view" id="view-horarios">
+      <div class="toolbar">
+        <p class="muted" style="flex:1;">Activa, desactiva o edita los servicios que se muestran en el sitio público.</p>
+        <button class="btn btn-cta" id="addHorario"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Agregar servicio</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Servicio</th><th>Inicio</th><th>Fin</th><th>Activo</th><th></th></tr></thead>
+          <tbody id="horariosBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ SERMONES ============ -->
+    <section class="view" id="view-sermones">
+      <div class="toolbar">
+        <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="sermSearch" placeholder="Buscar por título…" /></div>
+        <select class="filter-select" id="sermSerie"><option value="">Todas las series</option></select>
+        <select class="filter-select" id="sermPred"><option value="">Todos los predicadores</option></select>
+        <button class="btn btn-cta" id="addSerm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Nuevo sermón</button>
+      </div>
+      <div class="list" id="sermList"></div>
+    </section>
+
+    <!-- ============ EVENTOS ============ -->
+    <section class="view" id="view-eventos">
+      <div class="toolbar">
+        <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="evtSearch" placeholder="Buscar evento…" /></div>
+        <select class="filter-select" id="evtEstado"><option value="">Todos los estados</option><option value="proximo">Próximo</option><option value="pasado">Pasado</option><option value="borrador">Borrador</option></select>
+        <button class="btn btn-cta" id="addEvt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Nuevo evento</button>
+      </div>
+      <div class="list" id="evtList"></div>
+    </section>
+
+    <!-- ============ ANUNCIOS ============ -->
+    <section class="view" id="view-anuncios">
+      <div class="toolbar">
+        <p class="muted" style="flex:1;">Los anuncios activos aparecen en la portada del sitio y se ocultan al expirar.</p>
+        <button class="btn btn-cta" id="addAnn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Nuevo anuncio</button>
+      </div>
+      <div class="list" id="annList"></div>
+    </section>
+
+    <!-- ============ BLOG / DEVOCIONALES ============ -->
+    <section class="view" id="view-blog">
+      <div class="toolbar">
+        <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="blogSearch" placeholder="Buscar devocional o artículo…" /></div>
+        <button class="btn btn-cta" id="addBlog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Nueva publicación</button>
+      </div>
+      <div class="list" id="blogList"></div>
+    </section>
+
+    <!-- ============ REDES / FEED ============ -->
+    <section class="view" id="view-redes">
+      <div class="toolbar">
+        <p class="muted" style="flex:1;">Publicaciones del feed “Vive la comunidad también en línea”. Cada una abre tu canal de YouTube o tu página de Facebook.</p>
+        <button class="btn btn-cta" id="addSocial"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Nueva publicación</button>
+      </div>
+      <div class="list" id="socialList"></div>
+    </section>
+
+    <!-- ============ PETICIONES ============ -->
+    <section class="view" id="view-peticiones">
+      <div class="toolbar">
+        <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="reqSearch" placeholder="Buscar petición…" /></div>
+        <select class="filter-select" id="reqFilter"><option value="">Todas</option><option value="nueva">Nuevas</option><option value="orando">En oración</option><option value="atendida">Atendidas</option></select>
+      </div>
+      <div class="req-grid" id="reqList"></div>
+    </section>
+
+    <!-- ============ DONACIONES (eliminado) ============ -->
+
+  </main>
+</div>
+
+<!-- ===================== MODAL EDITAR/CREAR ===================== -->
+<div class="modal-overlay" id="formModal">
+  <div class="modal">
+    <div class="modal-head"><h3 id="fmTitle">Editar</h3><button class="modal-x" data-close-modal>✕</button></div>
+    <div class="modal-body" id="fmBody"></div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" data-close-modal>Cancelar</button>
+      <button class="btn btn-cta" id="fmSave"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5 9-11"/></svg>Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODAL CONFIRMAR ===================== -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal confirm">
+    <div class="c-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></div>
+    <h3 id="cfTitle">¿Estás seguro?</h3>
+    <p id="cfMsg">Esta acción no se puede deshacer.</p>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" data-close-modal>Cancelar</button>
+      <button class="btn btn-danger" id="cfConfirm">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="site-data.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

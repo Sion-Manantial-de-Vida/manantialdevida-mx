@@ -4,21 +4,44 @@ Sitio web oficial de la **Iglesia Sion Manantial de Vida** (Toluca / Metepec, Es
 
 - 🌐 Dominio: `manantialdevida.mx`
 - ✉️ Contacto: sion@manantialvida.mx
-- 🏔️ "Sube a nuevas alturas en Dios"
+- 🏔️ "Un manantial de vida para las naciones"
 
 ## Estado del proyecto
 
-🚧 En construcción — fase de diseño.
+✅ Diseño implementado (sitio estático generado con Claude Design). En revisión de contenido.
 
-## Estructura
+## Cómo ver el sitio
 
-| Carpeta / archivo | Para qué sirve |
+Es un sitio **estático** (HTML + CSS + JavaScript, sin servidor). Para verlo:
+
+- **Lo más fácil:** abre `index.html` con doble clic (se abre en tu navegador).
+- El panel de administración está en `admin.html` (se entra desde el botón "Acceso Pastoral").
+
+## Estructura de archivos
+
+| Archivo / carpeta | Qué es |
 |---|---|
-| `.env.local` | 🔒 Tokens y claves privadas (NUNCA se sube a GitHub) |
-| `.env.local.example` | Plantilla guía de qué tokens se necesitan |
-| `.gitignore` | Protege los secretos y archivos generados |
+| `index.html` | Página principal pública (inicio, servicios, nosotros, eventos, etc.) |
+| `admin.html` | Panel de administración ("Acceso Pastoral") |
+| `styles.css` | Estilos del sitio público |
+| `admin.css` | Estilos del panel de administración |
+| `app.js` | Lógica del sitio público |
+| `public-extra.js`, `public-events.js` | Funciones extra del sitio (eventos, calendario) |
+| `admin.js` | Lógica del panel de administración |
+| `site-data.js` | Contenido editable, compartido entre el sitio y el panel (usa el navegador) |
+| `assets/` | Imágenes: logos, foto del hero (montaña), anuncios |
+| `.env.local` | 🔒 Tokens privados (NUNCA se sube a GitHub) |
 
-## Notas
+## Notas técnicas / pendientes
 
-- Los secretos viven solo en `.env.local` (local, privado).
-- Repositorio **privado** mientras se construye.
+- Las imágenes de `assets/` son grandes (~32 MB en total). Conviene **optimizarlas**
+  (comprimir a tamaño web) antes de publicar, para que el sitio cargue rápido en celular.
+- El contenido se guarda por ahora en el navegador (localStorage) vía `site-data.js`.
+  Para que las ediciones del panel sean permanentes y compartidas, más adelante habrá
+  que conectar una base de datos / backend.
+- El login del panel es por ahora una maqueta (sin autenticación real). Antes de publicar
+  el panel hay que conectar un sistema de acceso seguro.
+- Falta elegir hosting (GitHub Pages o Cloudflare Pages, ambos gratuitos) y conectar el
+  dominio `manantialdevida.mx`.
+
+> Contexto, decisiones y memoria del proyecto: ver el repositorio `sion-knowledge-base`.

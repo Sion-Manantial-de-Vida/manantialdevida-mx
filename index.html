@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="claro" data-hero="foto" data-cards="suave" data-nav="transparente" data-menu="deslizante" data-corners="suaves">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Iglesia Sion · Manantial de Vida — Toluca, Estado de México</title>
+<meta name="description" content="Iglesia cristiana en Toluca y Metepec. Un manantial de vida para las naciones — refugio, restauración y avivamiento. Domingos 11:00 AM." />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body class="hero-dark">
+
+<!-- ===================== NAVBAR ===================== -->
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a href="#inicio" class="nav-logo" aria-label="Inicio">
+      <img src="assets/logo-cream.png" alt="Logo Iglesia Sion Manantial de Vida" />
+      <span class="lname">Iglesia Sion<small>Manantial de Vida</small></span>
+    </a>
+    <nav class="nav-links" aria-label="Principal">
+      <a href="#inicio" data-spy="inicio">Inicio</a>
+      <a href="#servicios" data-spy="servicios">Servicios</a>
+      <a href="#transmisiones" data-spy="transmisiones">En vivo</a>
+      <a href="#nosotros" data-spy="nosotros">Nosotros</a>
+      <a href="#comunidad" data-spy="comunidad">Comunidad</a>
+      <a href="#eventos" data-spy="eventos">Eventos</a>
+    </nav>
+    <a href="#visita" class="btn btn--cta nav-cta">Planifica tu visita</a>
+    <button class="nav-burger" id="burger" aria-label="Abrir menú" aria-expanded="false"><span></span></button>
+  </div>
+</header>
+
+<!-- ===================== MENÚ MÓVIL ===================== -->
+<div class="menu-backdrop" id="backdrop"></div>
+<aside class="mobile-menu" id="mobileMenu" aria-label="Menú móvil">
+  <nav>
+    <a href="#inicio">Inicio <span>›</span></a>
+    <a href="#servicios">Servicios <span>›</span></a>
+    <a href="#transmisiones">En vivo <span>›</span></a>
+    <a href="#nosotros">Quiénes Somos <span>›</span></a>
+    <a href="#comunidad">Comunidad <span>›</span></a>
+    <a href="#eventos">Eventos <span>›</span></a>
+    <a href="#anuncios">Anuncios <span>›</span></a>
+    <a href="#aprende">Aprende <span>›</span></a>
+    <a href="#oracion">Oración <span>›</span></a>
+  </nav>
+  <a href="#visita" class="btn btn--cta btn--block mm-cta">Planifica tu visita</a>
+  <a href="#" class="mm-access" data-open-login><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Acceso Pastoral</a>
+  <div class="mm-meta">
+    <strong>Domingos 11:00 AM</strong><br/>
+    Av. Solidaridad Las Torres 1096,<br/>Madero, Metepec, Méx.
+  </div>
+</aside>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="inicio">
+  <div class="hero-media">
+    <img class="hero-photo" src="assets/hero-montana.png" alt="Montaña nevada del Nevado de Toluca rodeada de bosque de pinos" />
+  </div>
+  <img src="assets/logo-navy.png" class="hero-watermark" alt="" aria-hidden="true" />
+  <div class="wrap">
+    <div class="hero-inner">
+      <span class="eyebrow" data-content="hero.eyebrow">Toluca · Estado de México</span>
+      <h1 data-content="hero.title">¡Bienvenidos a la Iglesia Sion Manantial de Vida!</h1>
+      <p class="sub" data-content="hero.subtitle">...Un manantial de vida para las naciones</p>
+      <blockquote class="hero-verse"><span data-content="hero.verse">«Jehová te pastoreará siempre… y serás como huerto de riego, y como manantial de aguas, cuyas aguas nunca faltan.»</span><cite data-content="hero.verseRef">Isaías 58:11</cite></blockquote>
+      <div class="hero-actions">
+        <a href="#nosotros" class="btn btn--cta btn--lg">Conoce más</a>
+        <div class="hero-events-dd" id="heroEventsDD">
+          <button type="button" class="btn btn--ghost btn--lg" id="heroEventsBtn" aria-expanded="false" style="--fg-btn:#fff; border-color:rgba(255,255,255,.45);">Próximos Eventos
+            <svg class="dd-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="hero-events-pop" id="heroEventsPop" role="menu" aria-label="Eventos de la semana">
+            <div class="hep-title">Esta semana</div>
+            <div class="hep-list" id="hepList"></div>
+            <a href="#eventos" class="hep-more" id="hepMore">Ver más eventos
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ACOMPÁÑANOS (banda horario) ===================== -->
+<div class="wrap acomp">
+  <div class="acomp-card reveal">
+    <div>
+      <span class="acomp-k">Servicio general</span>
+      <span class="acomp-v">Domingo · 11:00 AM</span>
+      <span class="acomp-s">Te esperamos con los brazos abiertos.</span>
+    </div>
+    <div>
+      <span class="acomp-k">Dónde nos reunimos</span>
+      <span class="acomp-v" style="font-size:1.15rem;">Av. Solidaridad Las Torres 1096</span>
+      <span class="acomp-s">Madero, Metepec, Méx. · C.P. 52172</span>
+    </div>
+    <div class="acomp-cta">
+      <a href="#servicios" class="btn btn--cta">Ver todos los horarios</a>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SERVICIOS ===================== -->
+<section class="section" id="servicios">
+  <div class="wrap">
+    <div class="section-head center">
+      <span class="eyebrow center">Acompáñanos</span>
+      <h2>Nuestros servicios</h2>
+      <p class="lead">Reúnete con nuestra familia esta semana. Ven tal como eres; aquí hay un lugar para ti.</p>
+    </div>
+
+    <div class="svc-carousel" data-carousel>
+      <button class="carousel-arrow prev" data-prev aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <div class="svc-track" data-track>
+        <article class="service-card featured reveal">
+          <span class="service-badge">Principal</span>
+          <span class="service-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span>
+          <span class="service-day">Domingo</span>
+          <div class="service-time">11:00 <span>AM</span></div>
+          <div class="service-name">Servicio General</div>
+          <p>Nuestra reunión principal: alabanza que inspira, un mensaje práctico de la Palabra y ministerio para toda la familia.</p>
+        </article>
+        <article class="service-card reveal">
+          <span class="service-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span>
+          <span class="service-day">Miércoles</span>
+          <div class="service-time">7:30 <span>PM</span></div>
+          <div class="service-name">Estudio Bíblico</div>
+          <p>Un alto a media semana para orar, crecer en la Palabra y fortalecernos en comunidad.</p>
+        </article>
+        <article class="service-card reveal">
+          <span class="service-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="8" r="3"/><path d="M3 20v-1a5 5 0 0 1 5-5h2a5 5 0 0 1 5 5v1"/><circle cx="17.5" cy="9.5" r="2.3"/><path d="M16 14.2a4 4 0 0 1 5 3.8V20"/></svg></span>
+          <span class="service-day">Viernes</span>
+          <div class="service-time">7:00 <span>PM</span></div>
+          <div class="service-name">Reunión de Jóvenes</div>
+          <p>Un espacio dinámico para que la próxima generación crezca en su fe y haga amigos.</p>
+        </article>
+        <article class="service-card reveal">
+          <span class="service-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/></svg></span>
+          <span class="service-day">Domingo</span>
+          <div class="service-time">10:00 <span>AM</span></div>
+          <div class="service-name">Iglesia Infantil</div>
+          <p>Un ambiente seguro y divertido donde los más pequeños aprenden de Dios.</p>
+        </article>
+        <article class="service-card reveal">
+          <span class="service-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l1.9 5.8H20l-4.9 3.6 1.9 5.8L12 14.6 7 18.2l1.9-5.8L4 8.8h6.1z"/></svg></span>
+          <span class="service-day">Martes</span>
+          <div class="service-time">6:00 <span>AM</span></div>
+          <div class="service-name">Oración de la Mañana</div>
+          <p>Comenzamos el día buscando juntos la presencia y la dirección de Dios.</p>
+        </article>
+        <article class="service-card reveal">
+          <span class="service-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 19V5a2 2 0 0 1 2-2h11l3 3v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span>
+          <span class="service-day">Jueves</span>
+          <div class="service-time">7:30 <span>PM</span></div>
+          <div class="service-name">Grupo de Matrimonios</div>
+          <p>Fortaleciendo los hogares de la iglesia a través de la Palabra y el compañerismo.</p>
+        </article>
+        <article class="service-card reveal">
+          <span class="service-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg></span>
+          <span class="service-day">Viernes</span>
+          <div class="service-time">8:00 <span>PM</span></div>
+          <div class="service-name">Noche de Oración</div>
+          <p>Buscamos juntos la presencia y el poder de Dios en intercesión y adoración.</p>
+        </article>
+      </div>
+      <button class="carousel-arrow next" data-next aria-label="Siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg></button>
+    </div>
+    <p class="schedule-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Todos nuestros servicios son <strong>semanales</strong>. <em>Desliza para ver más · editables desde el panel de administración.</em></p>
+  </div>
+</section>
+
+<!-- ===================== TRANSMISIONES EN VIVO ===================== -->
+<section class="section section--band" id="transmisiones">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Transmisiones en vivo</span>
+      <h2>Conéctate desde donde estés</h2>
+      <p class="lead">Únete a nuestro stream en vivo los domingos por la mañana y los miércoles, o mira los mensajes anteriores en nuestro canal de YouTube.</p>
+    </div>
+
+    <div class="split" style="align-items:start;">
+      <div>
+        <div class="video-frame reveal">
+          <span class="live-tag"><span class="dot"></span>EN VIVO</span>
+          <div class="ph" data-label="video embebido: transmisión de YouTube"></div>
+          <button class="play-btn" aria-label="Reproducir">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+        </div>
+        <a href="https://www.youtube.com/@iglesiasionmanantialdevida" target="_blank" rel="noopener" class="btn btn--cta" style="margin-top:18px;">Ver aquí en YouTube
+          <svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.5-.4-5.1a2.6 2.6 0 0 0-1.8-1.8C19 4.7 12 4.7 12 4.7s-7 0-8.8.4A2.6 2.6 0 0 0 1.4 6.9C1 8.5 1 12 1 12s0 3.5.4 5.1a2.6 2.6 0 0 0 1.8 1.8c1.8.4 8.8.4 8.8.4s7 0 8.8-.4a2.6 2.6 0 0 0 1.8-1.8C23 15.5 23 12 23 12zM9.8 15.3V8.7l5.7 3.3z"/></svg>
+        </a>
+      </div>
+
+      <div>
+        <h3 style="font-size:1.4rem; margin-bottom:6px;">Mensajes anteriores</h3>
+        <p class="muted" style="margin-bottom:18px;">Explora por series, temas o predicador.</p>
+        <div class="chip-row" style="margin-bottom:20px;">
+          <button class="chip" aria-pressed="true">Todos</button>
+          <button class="chip" aria-pressed="false">Series</button>
+          <button class="chip" aria-pressed="false">Temas</button>
+          <button class="chip" aria-pressed="false">Predicadores</button>
+        </div>
+        <div class="stack">
+          <a class="msg-row reveal" href="#transmisiones">
+            <div class="ph msg-thumb" data-label="thumb"></div>
+            <div>
+              <div class="meta">Serie · Nuevas Alturas</div>
+              <h4>Sube al monte: una vida con propósito</h4>
+              <div class="pr">Ps. [Nombre] · 14 abril</div>
+            </div>
+          </a>
+          <a class="msg-row reveal" href="#transmisiones">
+            <div class="ph msg-thumb" data-label="thumb"></div>
+            <div>
+              <div class="meta">Tema · Familia</div>
+              <h4>Hogares firmes, generaciones fuertes</h4>
+              <div class="pr">Ps. [Nombre] · 7 abril</div>
+            </div>
+          </a>
+          <a class="msg-row reveal" href="#transmisiones">
+            <div class="ph msg-thumb" data-label="thumb"></div>
+            <div>
+              <div class="meta">Serie · Manantial</div>
+              <h4>Ríos de agua viva</h4>
+              <div class="pr">Ps. [Nombre] · 31 marzo</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== QUIÉNES SOMOS ===================== -->
+<section class="section" id="nosotros">
+  <div class="wrap">
+    <div class="section-head center">
+      <span class="eyebrow center">Quiénes Somos</span>
+      <h2>Una comunidad centrada en Cristo y en las personas</h2>
+      <p class="lead" data-content="nosotros.desc">Nos dedicamos a acompañar a cada familia en su crecimiento espiritual a través de la enseñanza de la Palabra, la oración y el servicio, ayudando a cada persona a alcanzar nuevas alturas en su vida con Dios.</p>
+    </div>
+
+    <!-- Misión / Visión -->
+    <div class="mv2-grid" style="margin-bottom: clamp(40px,6vw,72px);">
+      <div class="mv2 mv2-mision reveal">
+        <span class="mv2-mark" aria-hidden="true">“</span>
+        <span class="mv2-label">Nuestra Misión</span>
+        <span class="mv2-rule"></span>
+        <p class="mv2-text" data-content="mision">Predicar el evangelio de Jesucristo con amor y poder, formando creyentes firmes en la fe, desarrollando líderes conforme al corazón de Dios y llevando esperanza, restauración y vida a Toluca, México y las naciones.</p>
+      </div>
+      <div class="mv2 mv2-vision reveal">
+        <span class="mv2-mark" aria-hidden="true">“</span>
+        <span class="mv2-label">Nuestra Visión</span>
+        <span class="mv2-rule"></span>
+        <p class="mv2-text" data-content="vision">Ser una iglesia llena de la presencia de Dios, que levante discípulos con pasión por Cristo, restaure familias, sane corazones y transforme generaciones mediante el poder del Espíritu Santo y la verdad de la Palabra de Dios.</p>
+      </div>
+    </div>
+
+    <!-- Valores Fundamentales -->
+    <div class="section-head center" style="max-width:640px;">
+      <span class="eyebrow center">Lo que nos sostiene</span>
+      <h2 style="font-size:clamp(1.7rem,3.4vw,2.4rem);">Valores Fundamentales</h2>
+    </div>
+    <div class="grid grid-3 values-grid" style="margin-bottom: clamp(40px,6vw,72px);">
+      <div class="value-card reveal"><span class="value-n">01</span><div><h4>Presencia de Dios</h4><p>Buscamos vivir bajo la dirección y llenura del Espíritu Santo.</p></div></div>
+      <div class="value-card reveal"><span class="value-n">02</span><div><h4>Sana doctrina</h4><p>La Biblia es nuestra autoridad y fundamento.</p></div></div>
+      <div class="value-card reveal"><span class="value-n">03</span><div><h4>Amor y restauración</h4><p>Creemos en restaurar vidas, matrimonios y familias.</p></div></div>
+      <div class="value-card reveal"><span class="value-n">04</span><div><h4>Oración e intercesión</h4><p>Dependemos totalmente de Dios en todo.</p></div></div>
+      <div class="value-card reveal"><span class="value-n">05</span><div><h4>Evangelismo</h4><p>Nuestra pasión es ganar almas para Cristo.</p></div></div>
+      <div class="value-card reveal"><span class="value-n">06</span><div><h4>Discipulado</h4><p>Formamos creyentes maduros y comprometidos.</p></div></div>
+      <div class="value-card reveal"><span class="value-n">07</span><div><h4>Servicio</h4><p>Servimos con humildad, excelencia y amor.</p></div></div>
+    </div>
+
+    <!-- Declaración de fe -->
+    <div class="section-head center" style="max-width:680px;">
+      <span class="eyebrow center">Declaración de fe</span>
+      <h2 style="font-size:clamp(1.7rem,3.4vw,2.4rem);">Nuestros Pilares Fundamentales</h2>
+      <p class="lead">22 verdades centrales de nuestra fe, fundamentadas en la Biblia. Toca un pilar para leerlo completo.</p>
+    </div>
+    <div class="faith-md" id="faithMD" style="margin-bottom: clamp(40px,6vw,72px);"></div>
+
+    <!-- Equipo pastoral -->
+    <div class="section-head center" style="max-width:640px;">
+      <span class="eyebrow center">Equipo pastoral y liderazgo</span>
+      <h2 style="font-size:clamp(1.7rem,3.4vw,2.4rem);">Rostros de la familia Sion</h2>
+    </div>
+    <div class="grid" style="margin:0 auto clamp(40px,6vw,72px);">
+      <div class="card pastor-card reveal" id="pastorCard">
+        <div class="ph pastor-photo" id="pastorPhoto" data-label="foto: pastores Tomás y Liliana"></div>
+        <div class="pastor-body">
+          <span class="role">Liderazgo general</span>
+          <h4>Pastores</h4>
+          <p class="pastor-bio" id="pastorBio" data-content="pastor.bio">En 2015, los pastores Tomás Díaz y Liliana le dijeron "sí" a Dios y comenzaron una aventura de fe que los llevó como misioneros a Costa Rica.</p>
+          <button type="button" class="pastor-more" id="pastorMore">Ver más
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nuestra historia -->
+    <div class="split" style="align-items:start;">
+      <div>
+        <span class="eyebrow">Nuestra historia</span>
+        <h3 style="font-size:1.9rem; margin:.5rem 0 1rem;">De un pequeño manantial a un río</h3>
+        <p class="muted" data-content="historia">Lo que comenzó como un grupo de familias orando juntas se ha convertido en una comunidad que sueña con transformar su ciudad. Esta es una reseña breve de nuestros inicios y trayecto — editable con sus fechas y momentos reales.</p>
+      </div>
+      <div class="timeline">
+        <div class="tl-item reveal"><div class="yr">Los inicios</div><h4>Una familia que ora</h4><p>Un grupo pequeño se reúne en casa con el sueño de servir a Toluca.</p></div>
+        <div class="tl-item reveal"><div class="yr">Crecimiento</div><h4>Nace una congregación</h4><p>Las reuniones crecen y se establece la iglesia con servicios semanales.</p></div>
+        <div class="tl-item reveal"><div class="yr">Hoy</div><h4>Una casa para la ciudad</h4><p>Familias, grupos en casa y ministerios que suben a nuevas alturas en Dios.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== AFILIACIÓN — ZION FELLOWSHIP ===================== -->
+<section class="section" id="afiliacion">
+  <div class="wrap">
+    <div class="afil-card reveal">
+      <div class="afil-logo">
+        <img src="assets/zion-fellowship.png" alt="Logo de Zion Fellowship International Inc." />
+      </div>
+      <div class="afil-body">
+        <span class="eyebrow">Afiliación internacional</span>
+        <h2 data-content="afil.title">Parte de la familia Zion Fellowship</h2>
+        <p class="afil-org"><strong data-content="afil.org">Zion Fellowship International Inc. · Sede en Waverly, Nueva York, EE. UU.</strong></p>
+        <p class="afil-desc" data-content="afil.desc">Estamos afiliados a Zion Fellowship, una familia de iglesias y ministerios alrededor del mundo. <em>[Espacio para describir brevemente la historia de cómo nos afiliamos: en qué fecha, en qué circunstancias y lo que esta relación significa para nuestra congregación — editable].</em></p>
+        <div class="afil-foot">
+          <span class="afil-date"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Afiliados desde <strong data-content="afil.date">[Mes Año]</strong></span>
+          <a href="https://zionfellowship.org" data-content-href="afil.link" target="_blank" rel="noopener" class="btn btn--cta">Visitar Zion Fellowship
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== COMUNIDAD Y GRUPOS ===================== -->
+<section class="section section--band" id="comunidad">
+  <div class="wrap">
+    <div class="section-head center">
+      <span class="eyebrow center">Comunidad y grupos en casa</span>
+      <h2 data-content="comunidad.titulo">Nadie debe caminar solo</h2>
+      <p class="lead" data-content="comunidad.sub">La vida cristiana se vive mejor en familia. Encuentra tu lugar para crecer, servir y pertenecer.</p>
+    </div>
+    <div class="grid grid-3">
+      <div class="card reveal">
+        <div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><circle cx="9" cy="7" r="3"/><path d="M16 3.1a3 3 0 0 1 0 5.8M21 21v-2a4 4 0 0 0-3-3.8"/></svg></div>
+        <h3 data-content="comunidad.c1.t">Grupos pequeños / Células</h3>
+        <p data-content="comunidad.c1.d">Nos reunimos en hogares durante la semana para compartir la vida, orar y crecer en la Palabra. Hay un grupo cerca de ti.</p>
+        <p style="color:var(--slate); font-weight:600; margin-top:1rem;"><span data-content="comunidad.c1.cta">Horarios y zonas disponibles</span> →</p>
+      </div>
+      <div class="card reveal">
+        <div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
+        <h3 data-content="comunidad.c2.t">Ministerios y voluntariado</h3>
+        <p data-content="comunidad.c2.d">Pon tus dones al servicio de la familia: música y alabanza, equipo de bienvenida, ministerio técnico y mucho más.</p>
+        <p style="color:var(--slate); font-weight:600; margin-top:1rem;"><span data-content="comunidad.c2.cta">Quiero servir</span> →</p>
+      </div>
+      <div class="card reveal">
+        <div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/></svg></div>
+        <h3 data-content="comunidad.c3.t">Ministerio de niños</h3>
+        <p data-content="comunidad.c3.d">Iglesia Infantil: un espacio seguro y divertido donde los más pequeños aprenden de Dios, dándote tranquilidad durante el servicio.</p>
+        <p style="color:var(--slate); font-weight:600; margin-top:1rem;"><span data-content="comunidad.c3.cta">Conoce el espacio</span> →</p>
+      </div>
+    </div>
+
+    <!-- Objetivos ministeriales -->
+    <div class="objetivos reveal">
+      <div class="objetivos-head">
+        <span class="eyebrow" style="color:var(--sand);">Hacia dónde vamos</span>
+        <h3 data-content="objetivos.titulo">Objetivos ministeriales</h3>
+      </div>
+      <ul class="objetivos-list">
+        <li><span class="obj-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg></span><span data-content="objetivos.1">Alcanzar almas para Cristo</span></li>
+        <li><span class="obj-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><circle cx="12" cy="7" r="3.2"/></svg></span><span data-content="objetivos.2">Levantar líderes y ministros</span></li>
+        <li><span class="obj-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/></svg></span><span data-content="objetivos.3">Restaurar familias</span></li>
+        <li><span class="obj-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v18M5 8l7-5 7 5"/><path d="M5 8v8l7 5 7-5V8"/></svg></span><span data-content="objetivos.4">Expandir el Reino de Dios</span></li>
+        <li><span class="obj-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2l2.4 6.9H21l-5.3 4.1 2 6.8L12 16.5 6.3 19.8l2-6.8L3 8.9h6.6z"/></svg></span><span data-content="objetivos.5">Formar una iglesia con identidad profética y evangelística</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== EVENTOS ===================== -->
+<section class="section" id="eventos">
+  <div class="wrap">
+    <div class="section-head center">
+      <span class="eyebrow center">Calendario</span>
+      <h2>Próximos eventos</h2>
+      <p class="lead">Hay un lugar para ti en cada encuentro. Estos son los eventos especiales de nuestra familia.</p>
+    </div>
+    <div class="events-tabs" id="eventsTabs" role="tablist">
+      <button class="events-tab active" data-etab="todos" role="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="4" width="7" height="7" rx="1.5"/><rect x="14" y="4" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Todos</button>
+      <button class="events-tab" data-etab="proximos" role="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Esta semana</button>
+      <button class="events-tab" data-etab="calendario" role="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Calendario</button>
+    </div>
+
+    <!-- Vista: tarjetas (todos / esta semana) en carrusel -->
+    <div class="events-pane" id="eventsPaneCards">
+      <div class="evt-carousel" data-carousel>
+        <button class="carousel-arrow prev" data-prev aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <div class="evt-track" id="eventsGrid" data-track></div>
+        <button class="carousel-arrow next" data-next aria-label="Siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+      <p class="muted center" id="eventsEmpty" style="display:none; padding:30px 0;">No hay eventos para mostrar. ¡Vuelve pronto!</p>
+    </div>
+
+    <!-- Vista: calendario -->
+    <div class="events-pane" id="eventsPaneCal" style="display:none;">
+      <div class="cal-layout">
+        <div class="cal-box">
+          <div class="cal-head">
+            <button class="cal-nav" id="calPrev" aria-label="Mes anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg></button>
+            <h3 id="calTitle">Mes 2026</h3>
+            <button class="cal-nav" id="calNext" aria-label="Mes siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg></button>
+          </div>
+          <div class="cal-grid" id="calGrid"></div>
+          <div class="cal-legend">
+            <span><i class="lg lg-svc"></i>Servicios</span>
+            <span><i class="lg lg-evt"></i>Eventos</span>
+          </div>
+        </div>
+        <div class="cal-detail" id="calDetail"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ANUNCIOS ===================== -->
+<section class="section section--band" id="anuncios">
+  <div class="wrap">
+    <div class="section-head center">
+      <span class="eyebrow center">Tablón de la iglesia</span>
+      <h2>Anuncios</h2>
+      <p class="lead">Mantente al día con lo que está pasando en la vida de nuestra congregación.</p>
+    </div>
+    <div class="announce-list" id="announceList"></div>
+    <p class="muted center" id="announceEmpty" style="display:none; padding:30px 0;">No hay anuncios activos en este momento.</p>
+  </div>
+</section>
+
+<!-- ===================== APRENDE ===================== -->
+<section class="section" id="aprende">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Aprende con nosotros</span>
+      <h2>Devocionales y blog</h2>
+      <p class="lead">Recursos para alimentar tu fe durante la semana, no solo el domingo.</p>
+    </div>
+    <div class="grid grid-3" id="blogGrid"></div>
+    <p class="muted center" id="blogEmpty" style="display:none; padding:30px 0;">Pronto publicaremos nuevos devocionales y artículos.</p>
+  </div>
+</section>
+
+<!-- ===================== ORACIÓN ===================== -->
+<section class="section section--band" id="oracion">
+  <div class="wrap">
+    <div class="section-head center">
+      <span class="eyebrow center">Cuidado pastoral y peticiones de oración</span>
+      <h2>Permítenos orar por ti</h2>
+      <p class="lead">No tienes que pasar por esto solo. Cuéntanos cómo podemos orar; nuestro equipo de intercesión está aquí para ti.</p>
+    </div>
+
+    <div class="split" style="align-items:start;">
+      <div>
+        <h3 style="font-size:1.5rem; margin-bottom:1.4rem;">¿Cómo funciona?</h3>
+        <div class="stack" style="gap:1.4rem;">
+          <div class="step reveal"><div class="num">1</div><div><h4 data-content="oracion.s1.t">Comparte tu petición</h4><p data-content="oracion.s1.d">Llena el formulario con lo que tienes en tu corazón. Puedes hacerlo de forma confidencial.</p></div></div>
+          <div class="step reveal"><div class="num">2</div><div><h4 data-content="oracion.s2.t">La recibe el equipo de intercesión</h4><p data-content="oracion.s2.d">Un grupo de personas dedicadas a orar recibe tu petición con respeto y cuidado.</p></div></div>
+          <div class="step reveal"><div class="num">3</div><div><h4 data-content="oracion.s3.t">Oramos por ti durante la semana</h4><p data-content="oracion.s3.d">Si lo deseas, un pastor te contactará para acompañarte de cerca.</p></div></div>
+        </div>
+        <div class="card" style="margin-top:1.8rem; background:var(--surface);">
+          <h4 style="font-size:1.1rem; font-family:var(--serif);" data-content="oracion.pastor.t">¿Necesitas hablar con un pastor?</h4>
+          <p class="muted" style="margin-top:.4rem;"><span data-content="oracion.pastor.d">Consejería familiar, bodas, bautizos y emergencias.</span> Escríbenos a <a href="mailto:sion@manantialvida.mx" data-content-mail="contacto.mail" style="color:var(--slate); font-weight:600;">sion@manantialvida.mx</a></p>
+        </div>
+      </div>
+
+      <div class="form-card reveal">
+        <form id="prayerForm" novalidate>
+          <h3 style="font-size:1.4rem; margin-bottom:1.2rem;">Peticiones / Acciones de gracias</h3>
+          <div class="field">
+            <label>Tipo</label>
+            <div class="radio-row">
+              <label class="radio-pill"><input type="radio" name="tipo" value="peticion" checked /><span>Petición</span></label>
+              <label class="radio-pill"><input type="radio" name="tipo" value="gracias" /><span>Acción de gracias</span></label>
+            </div>
+          </div>
+          <div class="field"><label for="pf-name">Nombre</label><input id="pf-name" name="nombre" type="text" placeholder="Tu nombre" required /></div>
+          <div class="field"><label for="pf-mail">Correo o teléfono</label><input id="pf-mail" name="contacto" type="text" placeholder="Para acompañarte (opcional)" /></div>
+          <div class="field"><label for="pf-msg">Tu mensaje</label><textarea id="pf-msg" name="mensaje" placeholder="Cuéntanos cómo podemos orar por ti…" required></textarea></div>
+          <button type="submit" class="btn btn--cta btn--block btn--lg">Enviar</button>
+          <p class="muted" style="font-size:.82rem; text-align:center; margin-top:.9rem; display:flex; gap:.4rem; justify-content:center; align-items:center;">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+            Tu información se trata con confidencialidad.
+          </p>
+        </form>
+        <div class="form-success" id="prayerSuccess">
+          <div class="ok"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5 9-11"/></svg></div>
+          <h3 style="font-size:1.4rem;">¡Gracias por confiar en nosotros!</h3>
+          <p class="muted" style="margin-top:.5rem;">Hemos recibido tu mensaje. Estaremos orando por ti esta semana.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== REDES ===================== -->
+<section class="section section--band" id="redes">
+  <div class="wrap">
+    <div class="section-head center">
+      <span class="eyebrow center">Síguenos</span>
+      <h2>Vive la comunidad también en línea</h2>
+      <p class="lead">Lo que Dios hace en Sion no cabe en una hora el domingo. Conéctate con nuestra familia durante toda la semana.</p>
+    </div>
+    <div class="feed-grid reveal" id="socialGrid" style="margin-bottom:2rem;"></div>
+    <div class="social-row" style="justify-content:center;">
+      <a href="https://www.youtube.com/@iglesiasionmanantialdevida" data-social="youtube" target="_blank" rel="noopener" class="social-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.5-.4-5.1a2.6 2.6 0 0 0-1.8-1.8C19 4.7 12 4.7 12 4.7s-7 0-8.8.4A2.6 2.6 0 0 0 1.4 6.9C1 8.5 1 12 1 12s0 3.5.4 5.1a2.6 2.6 0 0 0 1.8 1.8c1.8.4 8.8.4 8.8.4s7 0 8.8-.4a2.6 2.6 0 0 0 1.8-1.8C23 15.5 23 12 23 12zM9.8 15.3V8.7l5.7 3.3z"/></svg>YouTube</a>
+      <a href="https://facebook.com" data-social="facebook" target="_blank" rel="noopener" class="social-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12z"/></svg>Facebook</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PLANIFICA TU VISITA (cierre) ===================== -->
+<section class="section" id="visita">
+  <div class="wrap">
+    <div class="section-head center">
+      <span class="eyebrow center">Planifica tu visita</span>
+      <h2>Te esperamos en Metepec</h2>
+      <p class="lead">Estamos en Av. Solidaridad Las Torres 1096, Madero, Metepec. Llega con confianza: hay estacionamiento y un equipo de bienvenida listo para recibirte.</p>
+    </div>
+    <div class="map-frame reveal" style="min-height:440px;">
+      <iframe title="Ubicación de la iglesia" loading="lazy" src="https://www.google.com/maps?q=Av.%20Solidaridad%20Las%20Torres%201096%2C%20Madero%2C%20Metepec%2C%20Estado%20de%20M%C3%A9xico&output=embed"></iframe>
+    </div>
+    <div class="center" style="margin-top:24px;">
+      <a href="https://www.google.com/maps/dir/?api=1&destination=Av.+Solidaridad+Las+Torres+1096,+Madero,+Metepec" target="_blank" rel="noopener" class="btn btn--cta btn--lg">Cómo llegar
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+
+    <div class="expect" style="margin-top:clamp(48px,7vw,84px);">
+      <div class="section-head center" style="margin-bottom:clamp(28px,4vw,44px);">
+        <span class="eyebrow center">Tu primera vez</span>
+        <h2 style="font-size:clamp(1.7rem,3.4vw,2.4rem);">¿Qué esperar?</h2>
+      </div>
+      <div class="grid grid-4 expect-grid">
+        <div class="expect-item reveal">
+          <div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+          <h4 data-content="expect.1.t">Dos horas</h4>
+          <p data-content="expect.1.d">Cantos, un mensaje de la Biblia y tiempo para conectar.</p>
+        </div>
+        <div class="expect-item reveal">
+          <div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 7l4-3 5 3 5-3 4 3v13H3z"/></svg></div>
+          <h4 data-content="expect.2.t">Vestimenta casual</h4>
+          <p data-content="expect.2.d">Ven tal como eres. Aquí lo importante eres tú.</p>
+        </div>
+        <div class="expect-item reveal">
+          <div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="11" width="18" height="8" rx="2"/><path d="M5 11V8a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v3"/></svg></div>
+          <h4 data-content="expect.3.t">Estacionamiento</h4>
+          <p data-content="expect.3.d">Contamos con espacio para que llegues sin preocupaciones.</p>
+        </div>
+        <div class="expect-item reveal">
+          <div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/></svg></div>
+          <h4 data-content="expect.4.t">Un lugar para tus hijos</h4>
+          <p data-content="expect.4.d">Iglesia Infantil con un ambiente seguro y divertido.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <img src="assets/logo-cream.png" alt="Logo Iglesia Sion Manantial de Vida" />
+          <span class="lname">Iglesia Sion<small>Manantial de Vida</small></span>
+        </div>
+        <p style="max-width:280px; font-size:.95rem; line-height:1.7;">Una familia cristiana en Toluca y Metepec. Hay un lugar para ti.</p>
+        <div class="foot-social">
+          <a href="https://www.youtube.com/@iglesiasionmanantialdevida" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.5-.4-5.1a2.6 2.6 0 0 0-1.8-1.8C19 4.7 12 4.7 12 4.7s-7 0-8.8.4A2.6 2.6 0 0 0 1.4 6.9C1 8.5 1 12 1 12s0 3.5.4 5.1a2.6 2.6 0 0 0 1.8 1.8c1.8.4 8.8.4 8.8.4s7 0 8.8-.4a2.6 2.6 0 0 0 1.8-1.8C23 15.5 23 12 23 12zM9.8 15.3V8.7l5.7 3.3z"/></svg></a>
+          <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12z"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="#inicio">Inicio</a></li>
+          <li><a href="#visita">Visítanos</a></li>
+          <li><a href="#transmisiones">En vivo</a></li>
+          <li><a href="#nosotros">Quiénes Somos</a></li>
+          <li><a href="#comunidad">Comunidad</a></li>
+          <li><a href="#eventos">Eventos</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Horarios</h4>
+        <ul>
+          <li>Domingo · 11:30 AM – 1:30 PM</li>
+          <li>Miércoles · 7:30 – 8:30 PM</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contacto</h4>
+        <ul>
+          <li>Av. Solidaridad Las Torres 1096,<br/>Madero, Metepec, Méx. C.P. 52172</li>
+          <li><a href="mailto:sion@manantialvida.mx">sion@manantialvida.mx</a></li>
+          <li><a href="#visita">Cómo llegar →</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Iglesia Sion Manantial de Vida. Todos los derechos reservados.</span>
+      <span style="display:flex; gap:1.2rem; align-items:center; flex-wrap:wrap;">
+        <button type="button" class="foot-access" data-open-login>Acceso Pastoral</button>
+        <span>Un manantial de vida para las naciones.</span>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<!-- ===================== ACCESO PASTORAL (discreto, esquina superior) ===================== -->
+<button type="button" class="access-fab" data-open-login aria-label="Acceso Pastoral">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+  <span>Acceso Pastoral</span>
+</button>
+
+<!-- ===================== MODAL DE LOGIN ===================== -->
+<div class="login-overlay" id="loginOverlay" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+  <div class="login-modal">
+    <button type="button" class="login-close" id="loginClose" aria-label="Cerrar">✕</button>
+    <div class="login-lock">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="4" y="11" width="16" height="9" rx="2.2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/><circle cx="12" cy="15.5" r="1.4" fill="currentColor" stroke="none"/></svg>
+    </div>
+    <h2 id="loginTitle">Acceso Pastoral</h2>
+    <p class="login-sub">Bienvenido. Ingresa para administrar el sitio de la iglesia.</p>
+
+    <div class="login-error" id="loginError">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+      <span>Correo o contraseña incorrectos. Inténtalo de nuevo.</span>
+    </div>
+
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="lg-mail">Correo electrónico</label>
+        <input id="lg-mail" type="email" placeholder="pastor@manantialvida.mx" autocomplete="username" required />
+      </div>
+      <div class="field">
+        <label for="lg-pass">Contraseña</label>
+        <div class="pass-wrap">
+          <input id="lg-pass" type="password" placeholder="••••••••" autocomplete="current-password" required />
+          <button type="button" class="pass-toggle" id="passToggle" aria-label="Mostrar contraseña">
+            <svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="login-row">
+        <label class="remember"><input type="checkbox" id="lg-remember" /><span>Recuérdame</span></label>
+        <a href="#" class="login-link" id="forgotLink">¿Olvidaste tu contraseña?</a>
+      </div>
+      <button type="submit" class="btn btn--cta btn--block btn--lg login-submit" id="loginSubmit">
+        <span class="ls-label">Iniciar sesión</span>
+        <span class="ls-spinner" aria-hidden="true"></span>
+      </button>
+      <p class="login-help">¿Problemas para entrar? <a href="mailto:sion@manantialvida.mx" class="login-link">Contáctanos</a></p>
+      <div class="login-secure">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+        Conexión segura (HTTPS) · cifrado de extremo a extremo
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ===================== PANEL DE TWEAKS ===================== -->
+<div id="tweaksRoot"></div>
+
+<script src="site-data.js"></script>
+<script src="app.js"></script>
+<script src="public-extra.js"></script>
+<script src="public-events.js"></script>
+</body>
+</html>
