@@ -267,7 +267,7 @@
       </div>`).join('');
     $$('[data-edit-team]').forEach(b => b.addEventListener('click', () => openTeamForm(b.dataset.editTeam)));
     $$('[data-del-team]').forEach(b => b.addEventListener('click', () => {
-      confirmAction({ title: '¿Eliminar miembro?', msg: 'Se quitará del equipo pastoral en el sitio.', onYes: () => { data.equipo = data.equipo.filter(x => x.id !== b.dataset.delTeam); renderTeam(); toast('Miembro eliminado', 'ok'); } });
+      confirmAction({ title: '¿Eliminar miembro?', msg: 'Se quitará del equipo pastoral en el sitio.', onYes: () => { const delId = b.dataset.delTeam; data.equipo = data.equipo.filter(x => x.id !== delId); sbDelete('team', delId); renderTeam(); toast('Miembro eliminado', 'ok'); } });
     }));
   }
   function openTeamForm(id) {
@@ -279,9 +279,10 @@
       <div class="field"><label>Biografía breve</label><textarea name="bio" placeholder="Una breve reseña…">${esc(t.bio)}</textarea></div>
     `, () => {
       const n = val('nombre'); if (!n) { toast('Escribe un nombre', 'warn'); return; }
-      if (id) Object.assign(t, { nombre: n, cargo: val('cargo'), bio: val('bio') });
-      else data.equipo.push({ id: 't' + Date.now(), nombre: n, cargo: val('cargo'), bio: val('bio') });
-      renderTeam(); closeModal(formModal); toast('Equipo actualizado', 'ok');
+      let saved;
+      if (id) { Object.assign(t, { nombre: n, cargo: val('cargo'), bio: val('bio') }); saved = t; }
+      else { saved = { id: 't' + Date.now(), nombre: n, cargo: val('cargo'), bio: val('bio') }; data.equipo.push(saved); }
+      sbUpsert('team', saved); renderTeam(); closeModal(formModal); toast('Equipo actualizado', 'ok');
     });
   }
   $('#addTeam').addEventListener('click', () => openTeamForm(null));
@@ -307,6 +308,11 @@
     });
     data.content['pastor.photo'] = imgVal('pastorImg');
     persist();
+    // Guardar los textos en la tabla 'content' (clave/valor)
+    if (window.sbClient) {
+      const rows = Object.keys(data.content).map(k => ({ key: k, value: String(data.content[k] == null ? '' : data.content[k]) }));
+      window.sbClient.from('content').upsert(rows).then(r => { if (r.error) console.warn('[Sion] textos no guardados:', r.error.message); });
+    }
     toast('Cambios guardados · visibles en el sitio público', 'ok');
   });
 
@@ -818,6 +824,22 @@
       if (!sm.error && Array.isArray(sm.data)) {
         data.sermones = sm.data.map(r => ({ id: r.id, titulo: r.titulo, pred: r.pred, serie: r.serie, fecha: r.fecha, yt: r.yt, desc: r.descripcion, dest: !!r.dest }));
         renderSermones();
+      }
+    } catch (e) {}
+  })();
+
+  // 1e) Trae equipo y textos (content) desde sus tablas.
+  (async function loadTeamContentRemote() {
+    if (!window.sbClient) return;
+    try {
+      const tm = await window.sbClient.from('team').select('*').order('orden', { ascending: true });
+      if (!tm.error && Array.isArray(tm.data) && tm.data.length) { data.equipo = tm.data; renderTeam(); }
+    } catch (e) {}
+    try {
+      const ct = await window.sbClient.from('content').select('key,value');
+      if (!ct.error && Array.isArray(ct.data) && ct.data.length) {
+        ct.data.forEach(r => { data.content[r.key] = r.value; });
+        if (typeof fillInfoForm === 'function') fillInfoForm();
       }
     } catch (e) {}
   })();

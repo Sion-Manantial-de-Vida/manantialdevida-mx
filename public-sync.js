@@ -38,6 +38,16 @@
       } catch (e) {}
     }
 
+    // Textos (tabla content, clave/valor) — sobrescriben los textos por defecto
+    try {
+      const { data: rows, error } = await window.sbClient.from('content').select('key,value');
+      if (!error && Array.isArray(rows) && rows.length) {
+        const obj = {};
+        rows.forEach(r => { obj[r.key] = r.value; });
+        base.content = Object.assign({}, base.content || {}, obj);
+      }
+    } catch (e) {}
+
     // Si cambió respecto a lo cacheado, guardar y refrescar una vez
     try {
       const str = JSON.stringify(base);
