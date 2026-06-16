@@ -87,6 +87,8 @@
     if (Array.isArray(saved.anuncios)) out.anuncios = saved.anuncios;
     if (Array.isArray(saved.blog)) out.blog = saved.blog;
     if (Array.isArray(saved.social)) out.social = saved.social;
+    if (Array.isArray(saved.servicios)) out.servicios = saved.servicios;
+    if (Array.isArray(saved.sermones)) out.sermones = saved.sermones;
     return out;
   }
   function save(data) {
