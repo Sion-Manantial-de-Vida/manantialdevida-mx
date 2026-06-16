@@ -1,10 +1,11 @@
 /* ============================================================
    Sincroniza el contenido del sitio público desde Supabase.
    - Otras secciones: del "paquete" site_data (paso intermedio).
-   - EVENTOS: de la tabla normalizada 'events' (fuente de verdad).
-   Si algo cambió respecto a lo que ya está cacheado, refresca la
-   página una sola vez para mostrarlo. Si Supabase no responde, el
-   sitio sigue funcionando con el contenido por defecto.
+   - Secciones normalizadas (fuente de verdad, tablas):
+       eventos → events, anuncios → announcements,
+       blog → blog_posts, redes → social_feed.
+   Si algo cambió respecto a lo cacheado, refresca la página una
+   sola vez. Si Supabase no responde, el sitio sigue funcionando.
    ============================================================ */
 (function () {
   'use strict';
@@ -21,17 +22,19 @@
       }
     } catch (e) {}
 
-    // EVENTOS desde la tabla normalizada
-    try {
-      const { data: rows, error } = await window.sbClient
-        .from('events').select('*').order('fecha', { ascending: true });
-      if (!error && Array.isArray(rows)) {
-        base.eventos = rows.map(r => ({
-          id: r.id, titulo: r.titulo, fecha: r.fecha, hora: r.hora,
-          lugar: r.lugar, desc: r.descripcion, estado: r.estado, reg: !!r.reg
-        }));
-      }
-    } catch (e) {}
+    // Secciones normalizadas: tabla -> clave en el objeto del sitio
+    const tablas = [
+      ['events', 'eventos', r => ({ id: r.id, titulo: r.titulo, fecha: r.fecha, hora: r.hora, lugar: r.lugar, desc: r.descripcion, estado: r.estado, reg: !!r.reg })],
+      ['announcements', 'anuncios', null],
+      ['blog_posts', 'blog', null],
+      ['social_feed', 'social', null]
+    ];
+    for (const [tabla, clave, mapFn] of tablas) {
+      try {
+        const { data: rows, error } = await window.sbClient.from(tabla).select('*');
+        if (!error && Array.isArray(rows)) base[clave] = mapFn ? rows.map(mapFn) : rows;
+      } catch (e) {}
+    }
 
     // Si cambió respecto a lo cacheado, guardar y refrescar una vez
     try {

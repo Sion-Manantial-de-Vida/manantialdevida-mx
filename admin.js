@@ -431,6 +431,9 @@
   function evtRow(e) { return { id: e.id, titulo: e.titulo, fecha: e.fecha, hora: e.hora, lugar: e.lugar, descripcion: e.desc, estado: e.estado, reg: !!e.reg }; }
   function eventsUpsert(e) { if (window.sbClient) window.sbClient.from('events').upsert(evtRow(e)).then(r => { if (r.error) console.warn('[Sion] evento no guardado en la nube:', r.error.message); }); }
   function eventsDelete(id) { if (window.sbClient) window.sbClient.from('events').delete().eq('id', id).then(r => { if (r.error) console.warn('[Sion] evento no borrado en la nube:', r.error.message); }); }
+  /* ---- Helpers genéricos para CRUD en Supabase (secciones que mapean 1:1) ---- */
+  function sbUpsert(table, row) { if (window.sbClient) window.sbClient.from(table).upsert(row).then(r => { if (r.error) console.warn('[Sion] ' + table + ' no guardado:', r.error.message); }); }
+  function sbDelete(table, id) { if (window.sbClient) window.sbClient.from(table).delete().eq('id', id).then(r => { if (r.error) console.warn('[Sion] ' + table + ' no borrado:', r.error.message); }); }
   async function loadEventsRemote() {
     if (!window.sbClient) return;
     try {
@@ -512,7 +515,7 @@
     $$('[data-edit-a]').forEach(b => b.addEventListener('click', () => openAnnForm(b.dataset.editA)));
     $$('[data-prev-a]').forEach(b => b.addEventListener('click', () => previewAnn(b.dataset.prevA)));
     $$('[data-del-a]').forEach(b => b.addEventListener('click', () => {
-      confirmAction({ title: '¿Eliminar anuncio?', msg: 'Dejará de mostrarse en el sitio.', onYes: () => { data.anuncios = data.anuncios.filter(x => x.id !== b.dataset.delA); persist(); renderAnuncios(); toast('Anuncio eliminado', 'ok'); } });
+      confirmAction({ title: '¿Eliminar anuncio?', msg: 'Dejará de mostrarse en el sitio.', onYes: () => { const delId = b.dataset.delA; data.anuncios = data.anuncios.filter(x => x.id !== delId); persist(); sbDelete('announcements', delId); renderAnuncios(); toast('Anuncio eliminado', 'ok'); } });
     }));
   }
   function annBannerHTML(a) {
@@ -562,8 +565,8 @@
     `, () => {
       const t = val('titulo'); if (!t) { toast('Escribe un título', 'warn'); return; }
       const obj = { titulo: t, texto: val('texto'), img: imgVal, ini: val('ini'), fin: val('fin'), orden: +val('orden') || 1, activo: chk('activo') };
-      if (id) Object.assign(a, obj); else data.anuncios.push(Object.assign({ id: 'a' + Date.now() }, obj));
-      persist(); renderAnuncios(); closeModal(formModal); toast('Anuncio guardado', 'ok');
+      let saved; if (id) { Object.assign(a, obj); saved = a; } else { saved = Object.assign({ id: 'a' + Date.now() }, obj); data.anuncios.push(saved); }
+      persist(); sbUpsert('announcements', saved); renderAnuncios(); closeModal(formModal); toast('Anuncio guardado', 'ok');
     });
     // --- lógica del selector de imagen ---
     const drop = $('#annImgDrop'), prev = $('#annImgPrev'), emptyEl = $('#annImgDrop .img-drop-empty');
@@ -617,7 +620,7 @@
       </div>`).join('');
     $$('[data-edit-b]').forEach(x => x.addEventListener('click', () => openBlogForm(x.dataset.editB)));
     $$('[data-del-b]').forEach(x => x.addEventListener('click', () => {
-      confirmAction({ title: '¿Eliminar publicación?', msg: 'Dejará de mostrarse en el sitio.', onYes: () => { data.blog = data.blog.filter(y => y.id !== x.dataset.delB); persist(); renderBlog(); toast('Publicación eliminada', 'ok'); } });
+      confirmAction({ title: '¿Eliminar publicación?', msg: 'Dejará de mostrarse en el sitio.', onYes: () => { const delId = x.dataset.delB; data.blog = data.blog.filter(y => y.id !== delId); persist(); sbDelete('blog_posts', delId); renderBlog(); toast('Publicación eliminada', 'ok'); } });
     }));
   }
   function openBlogForm(id) {
@@ -636,8 +639,8 @@
     `, () => {
       const t = val('titulo'); if (!t) { toast('Escribe un título', 'warn'); return; }
       const obj = { tipo: val('tipo') || 'Artículo', titulo: t, extracto: val('extracto'), cuerpo: val('cuerpo'), autor: val('autor'), fecha: val('fecha'), img: imgVal('blogImg'), activo: chk('activo') };
-      if (id) Object.assign(b, obj); else data.blog.unshift(Object.assign({ id: 'b' + Date.now() }, obj));
-      persist(); renderBlog(); closeModal(formModal); toast('Publicación guardada', 'ok');
+      let saved; if (id) { Object.assign(b, obj); saved = b; } else { saved = Object.assign({ id: 'b' + Date.now() }, obj); data.blog.unshift(saved); }
+      persist(); sbUpsert('blog_posts', saved); renderBlog(); closeModal(formModal); toast('Publicación guardada', 'ok');
     });
     wireImagePicker('blogImg');
   }
@@ -668,7 +671,7 @@
       </div>`).join('');
     $$('[data-edit-soc]').forEach(x => x.addEventListener('click', () => openSocialForm(x.dataset.editSoc)));
     $$('[data-del-soc]').forEach(x => x.addEventListener('click', () => {
-      confirmAction({ title: '¿Eliminar publicación?', msg: 'Dejará de mostrarse en el feed.', onYes: () => { data.social = data.social.filter(y => y.id !== x.dataset.delSoc); persist(); renderSocial(); toast('Publicación eliminada', 'ok'); } });
+      confirmAction({ title: '¿Eliminar publicación?', msg: 'Dejará de mostrarse en el feed.', onYes: () => { const delId = x.dataset.delSoc; data.social = data.social.filter(y => y.id !== delId); persist(); sbDelete('social_feed', delId); renderSocial(); toast('Publicación eliminada', 'ok'); } });
     }));
   }
   function openSocialForm(id) {
@@ -687,8 +690,8 @@
       const t = val('titulo'); if (!t) { toast('Escribe un título', 'warn'); return; }
       const red = (document.querySelector('#fmBody [name="red"]:checked') || {}).value || 'youtube';
       const obj = { titulo: t, img: imgVal('socImg'), red: red, url: val('url') };
-      if (id) Object.assign(p, obj); else data.social.push(Object.assign({ id: 's' + Date.now() }, obj));
-      persist(); renderSocial(); closeModal(formModal); toast('Publicación guardada', 'ok');
+      let saved; if (id) { Object.assign(p, obj); saved = p; } else { saved = Object.assign({ id: 's' + Date.now() }, obj); data.social.push(saved); }
+      persist(); sbUpsert('social_feed', saved); renderSocial(); closeModal(formModal); toast('Publicación guardada', 'ok');
     });
     wireImagePicker('socImg');
   }
@@ -786,6 +789,18 @@
 
   // 1b) Trae los eventos reales desde la tabla 'events'.
   loadEventsRemote();
+
+  // 1c) Trae anuncios, blog y redes desde sus tablas.
+  (async function loadListsRemote() {
+    if (!window.sbClient) return;
+    const map = [['announcements', 'anuncios', renderAnuncios], ['blog_posts', 'blog', renderBlog], ['social_feed', 'social', renderSocial]];
+    for (const [table, key, render] of map) {
+      try {
+        const { data: rows, error } = await window.sbClient.from(table).select('*');
+        if (!error && Array.isArray(rows)) { data[key] = rows; render(); }
+      } catch (e) {}
+    }
+  })();
 
   // 2) Trae el contenido más reciente del sitio (si fue editado en otro dispositivo).
   (async function syncContentRemote() {
