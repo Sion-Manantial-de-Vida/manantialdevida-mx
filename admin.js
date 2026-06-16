@@ -337,11 +337,12 @@
     $('#horariosBody').innerHTML = rows || `<tr><td colspan="5"><div class="empty"><p>No hay servicios. Agrega el primero.</p></div></td></tr>`;
     $$('[data-toggle-h]').forEach(t => t.addEventListener('change', () => {
       const h = data.horarios.find(x => x.id === t.dataset.toggleH); h.activo = t.checked;
+      sbUpsert('services', h);
       toast(h.activo ? 'Servicio activado' : 'Servicio desactivado', 'ok');
     }));
     $$('[data-edit-h]').forEach(b => b.addEventListener('click', () => openHorarioForm(b.dataset.editH)));
     $$('[data-del-h]').forEach(b => b.addEventListener('click', () => {
-      confirmAction({ title: '¿Eliminar servicio?', msg: 'Se quitará del sitio público.', onYes: () => { data.horarios = data.horarios.filter(x => x.id !== b.dataset.delH); renderHorarios(); toast('Servicio eliminado', 'ok'); } });
+      confirmAction({ title: '¿Eliminar servicio?', msg: 'Se quitará del sitio público.', onYes: () => { const delId = b.dataset.delH; data.horarios = data.horarios.filter(x => x.id !== delId); sbDelete('services', delId); renderHorarios(); toast('Servicio eliminado', 'ok'); } });
     }));
   }
   function openHorarioForm(id) {
@@ -356,9 +357,10 @@
       </div>
     `, () => {
       const n = val('nombre'); if (!n) { toast('Escribe el nombre del servicio', 'warn'); return; }
-      if (id) Object.assign(h, { dia: val('dia'), nombre: n, ini: val('ini'), fin: val('fin') });
-      else data.horarios.push({ id: 'h' + Date.now(), dia: val('dia'), nombre: n, ini: val('ini'), fin: val('fin'), activo: true });
-      renderHorarios(); closeModal(formModal); toast('Horario guardado', 'ok');
+      let saved;
+      if (id) { Object.assign(h, { dia: val('dia'), nombre: n, ini: val('ini'), fin: val('fin') }); saved = h; }
+      else { saved = { id: 'h' + Date.now(), dia: val('dia'), nombre: n, ini: val('ini'), fin: val('fin'), activo: true }; data.horarios.push(saved); }
+      sbUpsert('services', saved); renderHorarios(); closeModal(formModal); toast('Horario guardado', 'ok');
     });
   }
   $('#addHorario').addEventListener('click', () => openHorarioForm(null));
@@ -397,7 +399,7 @@
       </div>`).join('');
     $$('[data-edit-s]').forEach(b => b.addEventListener('click', () => openSermForm(b.dataset.editS)));
     $$('[data-del-s]').forEach(b => b.addEventListener('click', () => {
-      confirmAction({ title: '¿Eliminar sermón?', msg: 'Esta acción no se puede deshacer.', onYes: () => { data.sermones = data.sermones.filter(x => x.id !== b.dataset.delS); renderSermones(); toast('Sermón eliminado', 'ok'); } });
+      confirmAction({ title: '¿Eliminar sermón?', msg: 'Esta acción no se puede deshacer.', onYes: () => { const delId = b.dataset.delS; data.sermones = data.sermones.filter(x => x.id !== delId); sbDelete('sermons', delId); renderSermones(); toast('Sermón eliminado', 'ok'); } });
     }));
   }
   function openSermForm(id) {
@@ -416,8 +418,8 @@
     `, () => {
       const t = val('titulo'); if (!t) { toast('Escribe un título', 'warn'); return; }
       const obj = { titulo: t, pred: val('pred'), serie: val('serie'), fecha: val('fecha'), yt: val('yt'), desc: val('desc'), dest: chk('dest') };
-      if (id) Object.assign(s, obj); else data.sermones.unshift(Object.assign({ id: 's' + Date.now() }, obj));
-      renderSermones(); closeModal(formModal); toast('Sermón guardado', 'ok');
+      let saved; if (id) { Object.assign(s, obj); saved = s; } else { saved = Object.assign({ id: 's' + Date.now() }, obj); data.sermones.unshift(saved); }
+      sbUpsert('sermons', sermRow(saved)); renderSermones(); closeModal(formModal); toast('Sermón guardado', 'ok');
     });
   }
   $('#addSerm').addEventListener('click', () => openSermForm(null));
@@ -434,6 +436,8 @@
   /* ---- Helpers genéricos para CRUD en Supabase (secciones que mapean 1:1) ---- */
   function sbUpsert(table, row) { if (window.sbClient) window.sbClient.from(table).upsert(row).then(r => { if (r.error) console.warn('[Sion] ' + table + ' no guardado:', r.error.message); }); }
   function sbDelete(table, id) { if (window.sbClient) window.sbClient.from(table).delete().eq('id', id).then(r => { if (r.error) console.warn('[Sion] ' + table + ' no borrado:', r.error.message); }); }
+  // Sermones usan 'descripcion' en la tabla pero 'desc' en el panel.
+  function sermRow(s) { return { id: s.id, titulo: s.titulo, pred: s.pred, serie: s.serie, fecha: s.fecha, yt: s.yt, descripcion: s.desc, dest: !!s.dest }; }
   async function loadEventsRemote() {
     if (!window.sbClient) return;
     try {
@@ -800,6 +804,22 @@
         if (!error && Array.isArray(rows)) { data[key] = rows; render(); }
       } catch (e) {}
     }
+  })();
+
+  // 1d) Trae horarios y sermones desde sus tablas.
+  (async function loadHorariosSermonesRemote() {
+    if (!window.sbClient) return;
+    try {
+      const sv = await window.sbClient.from('services').select('*');
+      if (!sv.error && Array.isArray(sv.data)) { data.horarios = sv.data; renderHorarios(); }
+    } catch (e) {}
+    try {
+      const sm = await window.sbClient.from('sermons').select('*');
+      if (!sm.error && Array.isArray(sm.data)) {
+        data.sermones = sm.data.map(r => ({ id: r.id, titulo: r.titulo, pred: r.pred, serie: r.serie, fecha: r.fecha, yt: r.yt, desc: r.descripcion, dest: !!r.dest }));
+        renderSermones();
+      }
+    } catch (e) {}
   })();
 
   // 2) Trae el contenido más reciente del sitio (si fue editado en otro dispositivo).

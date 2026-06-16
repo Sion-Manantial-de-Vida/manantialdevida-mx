@@ -2,10 +2,10 @@
    Sincroniza el contenido del sitio público desde Supabase.
    - Otras secciones: del "paquete" site_data (paso intermedio).
    - Secciones normalizadas (fuente de verdad, tablas):
-       eventos → events, anuncios → announcements,
-       blog → blog_posts, redes → social_feed.
-   Si algo cambió respecto a lo cacheado, refresca la página una
-   sola vez. Si Supabase no responde, el sitio sigue funcionando.
+       eventos → events, anuncios → announcements, blog → blog_posts,
+       redes → social_feed, servicios → services, sermones → sermons.
+   Si algo cambió respecto a lo cacheado, refresca la página una sola
+   vez. Si Supabase no responde, el sitio sigue funcionando.
    ============================================================ */
 (function () {
   'use strict';
@@ -22,12 +22,14 @@
       }
     } catch (e) {}
 
-    // Secciones normalizadas: tabla -> clave en el objeto del sitio
+    // Secciones normalizadas: [tabla, clave en el objeto, función de mapeo opcional]
     const tablas = [
       ['events', 'eventos', r => ({ id: r.id, titulo: r.titulo, fecha: r.fecha, hora: r.hora, lugar: r.lugar, desc: r.descripcion, estado: r.estado, reg: !!r.reg })],
       ['announcements', 'anuncios', null],
       ['blog_posts', 'blog', null],
-      ['social_feed', 'social', null]
+      ['social_feed', 'social', null],
+      ['services', 'servicios', null],
+      ['sermons', 'sermones', r => ({ id: r.id, titulo: r.titulo, pred: r.pred, serie: r.serie, fecha: r.fecha, yt: r.yt, desc: r.descripcion, dest: !!r.dest })]
     ];
     for (const [tabla, clave, mapFn] of tablas) {
       try {
