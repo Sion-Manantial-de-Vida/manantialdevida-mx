@@ -97,6 +97,7 @@
     info: ['Información de la Iglesia', 'Edita la información que se muestra en el sitio'],
     horarios: ['Horarios de servicios', 'Gestiona los servicios semanales'],
     sermones: ['Transmisiones en vivo', 'Video en vivo, botón y mensajes anteriores del canal'],
+    fe: ['Declaración de Fe', 'Encabezado y pilares de la sección'],
     eventos: ['Eventos', 'Crea y gestiona los eventos de la iglesia'],
     anuncios: ['Anuncios destacados', 'Anuncios que aparecen en el sitio público'],
     blog: ['Devocionales y Blog', 'Publicaciones que aparecen en “Aprende con nosotros”'],
@@ -489,6 +490,26 @@
       { key: 'trans.coverImg', value: data.content['trans.coverImg'] }
     ]).then(r => { if (r.error) console.warn('[Sion] config transmisiones:', r.error.message); });
     toast('Configuración guardada · visible en el sitio', 'ok');
+  });
+
+  /* ---------- Declaración de Fe: encabezado de la sección ---------- */
+  function fillFeCfg() {
+    if ($('#cfgFeEyebrow')) $('#cfgFeEyebrow').value = data.content['fe.eyebrow'] || '';
+    if ($('#cfgFeTitulo')) $('#cfgFeTitulo').value = data.content['fe.titulo'] || '';
+    if ($('#cfgFeLead')) $('#cfgFeLead').value = data.content['fe.lead'] || '';
+  }
+  fillFeCfg();
+  if ($('#cfgFeSave')) $('#cfgFeSave').addEventListener('click', () => {
+    data.content['fe.eyebrow'] = $('#cfgFeEyebrow').value.trim();
+    data.content['fe.titulo'] = $('#cfgFeTitulo').value.trim();
+    data.content['fe.lead'] = $('#cfgFeLead').value.trim();
+    persist();
+    if (window.sbClient) window.sbClient.from('content').upsert([
+      { key: 'fe.eyebrow', value: data.content['fe.eyebrow'] },
+      { key: 'fe.titulo', value: data.content['fe.titulo'] },
+      { key: 'fe.lead', value: data.content['fe.lead'] }
+    ]).then(r => { if (r.error) console.warn('[Sion] config fe:', r.error.message); });
+    toast('Encabezado guardado · visible en el sitio', 'ok');
   });
 
   /* ============================================================
@@ -906,6 +927,7 @@
         ct.data.forEach(r => { data.content[r.key] = r.value; });
         if (typeof fillInfoForm === 'function') fillInfoForm();
         if (typeof fillTransCfg === 'function') fillTransCfg();
+        if (typeof fillFeCfg === 'function') fillFeCfg();
       }
     } catch (e) {}
   })();

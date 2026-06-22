@@ -24,6 +24,10 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/></svg>
       Información de la Iglesia
     </button>
+    <button class="sb-link" data-view="fe">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v17M6 20h12M5 7h14"/><path d="M5 7l-2.5 6a3.5 3.5 0 007 0L7 7M17 7l-2.5 6a3.5 3.5 0 007 0L19 7"/></svg>
+      Declaración de Fe
+    </button>
     <button class="sb-link" data-view="horarios">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
       Horarios
@@ -164,9 +168,6 @@
           <div class="grid-2"><div class="field"><label>Etiqueta</label><input data-c="nosotros.eyebrow" /></div><div class="field"><label>Título</label><input data-c="nosotros.titulo" /></div></div>
           <p class="muted" style="font-weight:700; margin:12px 0 6px; color:var(--navy);">Valores fundamentales</p>
           <div class="grid-2"><div class="field"><label>Etiqueta</label><input data-c="valores.eyebrow" /></div><div class="field"><label>Título</label><input data-c="valores.titulo" /></div></div>
-          <p class="muted" style="font-weight:700; margin:12px 0 6px; color:var(--navy);">Declaración de fe (encabezado)</p>
-          <div class="grid-2"><div class="field"><label>Etiqueta</label><input data-c="fe.eyebrow" /></div><div class="field"><label>Título</label><input data-c="fe.titulo" /></div></div>
-          <div class="field"><label>Subtítulo</label><input data-c="fe.lead" /></div>
           <p class="muted" style="font-weight:700; margin:12px 0 6px; color:var(--navy);">Equipo pastoral (encabezado)</p>
           <div class="grid-2"><div class="field"><label>Etiqueta</label><input data-c="equipo.eyebrow" /></div><div class="field"><label>Título</label><input data-c="equipo.titulo" /></div></div>
           <p class="muted" style="font-weight:700; margin:12px 0 6px; color:var(--navy);">Eventos</p>
@@ -223,15 +224,6 @@
             <div class="field"><label>Foto de los pastores</label><div id="pastorPhotoPicker"></div></div>
             <div class="field"><label>Tamaño de la foto</label><select data-c="pastor.photoSize"><option value="pequena">Pequeña</option><option value="mediana">Mediana</option><option value="grande">Grande</option></select><span class="hint">Controla el ancho de la foto en la tarjeta pública.</span></div>
           </div>
-        </div>
-
-        <div class="card card-pad" style="margin-bottom:18px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-            <h3 class="sec-title">Declaración de Fe</h3>
-            <button type="button" class="btn btn-ghost btn-sm" id="addFaith"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Agregar pilar</button>
-          </div>
-          <p class="muted" style="font-size:.85rem; margin-bottom:12px;">Los pilares que se muestran en la sección "Declaración de Fe" del sitio. Toca uno para editarlo.</p>
-          <div id="faithList" class="list"></div>
         </div>
 
         <div class="card card-pad" style="margin-bottom:18px;">
@@ -336,6 +328,27 @@
     </section>
 
     <!-- ============ HORARIOS ============ -->
+    <section class="view" id="view-fe">
+      <div class="card card-pad" style="margin-bottom:18px;">
+        <h3 class="sec-title" style="margin-bottom:6px;">Encabezado de la sección</h3>
+        <p class="muted" style="font-size:.85rem; margin-bottom:14px;">Textos que aparecen arriba de la Declaración de Fe en el sitio.</p>
+        <div class="grid-2">
+          <div class="field"><label>Etiqueta</label><input id="cfgFeEyebrow" /></div>
+          <div class="field"><label>Título</label><input id="cfgFeTitulo" /></div>
+        </div>
+        <div class="field"><label>Subtítulo</label><input id="cfgFeLead" /></div>
+        <button type="button" class="btn btn-cta" id="cfgFeSave"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5 9-11"/></svg>Guardar encabezado</button>
+      </div>
+      <div class="card card-pad" style="margin-bottom:18px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+          <h3 class="sec-title">Pilares de la fe</h3>
+          <button type="button" class="btn btn-cta" id="addFaith"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Agregar pilar</button>
+        </div>
+        <p class="muted" style="font-size:.85rem; margin-bottom:12px;">Cada pilar que se muestra en la sección "Declaración de Fe" del sitio. Toca uno para editarlo o borrarlo.</p>
+        <div id="faithList" class="list"></div>
+      </div>
+    </section>
+
     <section class="view" id="view-horarios">
       <div class="toolbar">
         <p class="muted" style="flex:1;">Activa, desactiva o edita los servicios que se muestran en el sitio público.</p>
