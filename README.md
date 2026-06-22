@@ -4,7 +4,7 @@ Aplicación del sitio web oficial de la **Iglesia Sion Manantial de Vida** (Tolu
 Estado de México).
 
 - 🌐 En vivo: **https://manantialdevida.mx**
-- ✉️ Contacto: sion@manantialvida.mx
+- ✉️ Contacto: sion@manantialdevida.mx
 
 > **Este repo es solo para la aplicación.** El contexto de la iglesia, decisiones, bitácora
 > y conocimiento general viven en el repo privado `sion-knowledge-base`.
