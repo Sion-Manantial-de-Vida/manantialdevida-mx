@@ -65,13 +65,17 @@
   (function faithMD() {
     const root = document.getElementById('faithMD');
     if (!root) return;
+    // Usa la tabla 'faith' si tiene datos; si no, el contenido por defecto.
+    const ITEMS = (site.fe && site.fe.length)
+      ? site.fe.slice().sort((a, b) => (a.n || 0) - (b.n || 0)).map(r => ({ titulo: r.titulo, svg: I[r.ico] || I.final, texto: r.texto }))
+      : FAITH.map(f => ({ titulo: f[0], svg: f[1], texto: f[2] }));
     const ico = (p) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
     const n2 = (i) => String(i + 1);
     root.innerHTML = `
       <div class="faith-list" id="faithList">
-        ${FAITH.map((f, i) => `<button class="faith-row" data-fi="${i}">
-          <span class="fr-ico">${ico(f[1])}</span>
-          <span class="fr-title">${n2(i)}. ${esc(f[0])}</span>
+        ${ITEMS.map((f, i) => `<button class="faith-row" data-fi="${i}">
+          <span class="fr-ico">${ico(f.svg)}</span>
+          <span class="fr-title">${n2(i)}. ${esc(f.titulo)}</span>
           <span class="fr-plus">+</span>
         </button>`).join('')}
       </div>
@@ -87,11 +91,11 @@
     const modal = document.getElementById('faithModal');
     const box = modal.querySelector('.fm-box');
     function open(i) {
-      const f = FAITH[i];
-      document.getElementById('fmIco').innerHTML = ico(f[1]);
+      const f = ITEMS[i];
+      document.getElementById('fmIco').innerHTML = ico(f.svg);
       document.getElementById('fmNum').textContent = 'Pilar ' + (i + 1);
-      document.getElementById('fmTitle').textContent = f[0];
-      document.getElementById('fmText').textContent = f[2];
+      document.getElementById('fmTitle').textContent = f.titulo;
+      document.getElementById('fmText').textContent = f.texto;
       modal.classList.add('show');
       document.body.style.overflow = 'hidden';
     }

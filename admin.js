@@ -287,6 +287,46 @@
   }
   $('#addTeam').addEventListener('click', () => openTeamForm(null));
 
+  /* ---------- Declaración de Fe (pilares) ---------- */
+  const FAITH_ICOS = ['trinidad', 'cristo', 'biblia', 'gracia', 'agua', 'salud', 'dones', 'avivamiento', 'espiritu', 'resurreccion', 'matrimonio', 'pureza', 'redencion', 'dignidad', 'autoridad', 'mayordomia', 'sion', 'progresiva', 'final'];
+  function renderFaith() {
+    const wrap = $('#faithList'); if (!wrap) return;
+    const list = (data.fe || []).slice().sort((a, b) => (a.n || 0) - (b.n || 0));
+    if (!list.length) { wrap.innerHTML = emptyState('No hay pilares. Agrega el primero.'); return; }
+    wrap.innerHTML = list.map(f => `
+      <div class="list-row">
+        <div class="list-thumb" style="background:var(--navy);color:var(--sand);font-family:var(--serif);font-size:1.2rem;">${f.n || ''}</div>
+        <div class="list-body"><h4>${esc(f.titulo)}</h4><div class="sub">${esc(f.texto || '')}</div></div>
+        <div class="list-actions">
+          <button class="btn-icon" data-edit-fe="${f.id}" aria-label="Editar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
+          <button class="btn-icon" data-del-fe="${f.id}" aria-label="Eliminar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
+        </div>
+      </div>`).join('');
+    $$('[data-edit-fe]').forEach(b => b.addEventListener('click', () => openFaithForm(b.dataset.editFe)));
+    $$('[data-del-fe]').forEach(b => b.addEventListener('click', () => {
+      confirmAction({ title: '¿Eliminar pilar?', msg: 'Se quitará de la Declaración de Fe.', onYes: () => { const id = b.dataset.delFe; data.fe = (data.fe || []).filter(x => x.id !== id); sbDelete('faith', id); renderFaith(); toast('Pilar eliminado', 'ok'); } });
+    }));
+  }
+  function openFaithForm(id) {
+    const f = (data.fe || []).find(x => x.id === id) || { titulo: '', texto: '', ico: 'final', n: (data.fe || []).length + 1 };
+    openForm(id ? 'Editar pilar' : 'Nuevo pilar', `
+      <div class="grid-2">
+        <div class="field"><label>Orden</label><input name="n" type="number" min="1" value="${f.n || 1}" /></div>
+        <div class="field"><label>Ícono</label><select name="ico">${FAITH_ICOS.map(k => `<option ${k === f.ico ? 'selected' : ''}>${k}</option>`).join('')}</select></div>
+      </div>
+      <div class="field"><label>Título</label><input name="titulo" value="${esc(f.titulo)}" placeholder="Ej. La Trinidad" /></div>
+      <div class="field"><label>Texto</label><textarea name="texto" style="min-height:120px;">${esc(f.texto)}</textarea></div>
+    `, () => {
+      const t = val('titulo'); if (!t) { toast('Escribe un título', 'warn'); return; }
+      const obj = { titulo: t, texto: val('texto'), ico: val('ico') || 'final', n: +val('n') || 1 };
+      let saved;
+      if (id) { Object.assign(f, obj); saved = f; } else { saved = Object.assign({ id: 'f' + Date.now() }, obj); (data.fe = data.fe || []).push(saved); }
+      sbUpsert('faith', { id: saved.id, n: saved.n, titulo: saved.titulo, texto: saved.texto, ico: saved.ico });
+      renderFaith(); closeModal(formModal); toast('Pilar guardado', 'ok');
+    });
+  }
+  if ($('#addFaith')) $('#addFaith').addEventListener('click', () => openFaithForm(null));
+
   // Poblar los campos de texto desde el contenido guardado
   function fillInfoForm() {
     document.querySelectorAll('#infoForm [data-c]').forEach(el => {
@@ -765,6 +805,7 @@
      ============================================================ */
   renderActivity();
   renderTeam();
+  renderFaith();
   renderHorarios();
   renderSermones();
   renderEventos();
@@ -834,6 +875,10 @@
     try {
       const tm = await window.sbClient.from('team').select('*').order('orden', { ascending: true });
       if (!tm.error && Array.isArray(tm.data) && tm.data.length) { data.equipo = tm.data; renderTeam(); }
+    } catch (e) {}
+    try {
+      const fe = await window.sbClient.from('faith').select('*');
+      if (!fe.error && Array.isArray(fe.data)) { data.fe = fe.data; renderFaith(); }
     } catch (e) {}
     try {
       const ct = await window.sbClient.from('content').select('key,value');

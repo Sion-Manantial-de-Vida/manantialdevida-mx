@@ -98,6 +98,7 @@
     if (Array.isArray(saved.social)) out.social = saved.social;
     if (Array.isArray(saved.servicios)) out.servicios = saved.servicios;
     if (Array.isArray(saved.sermones)) out.sermones = saved.sermones;
+    if (Array.isArray(saved.fe)) out.fe = saved.fe;
     return out;
   }
   function save(data) {
