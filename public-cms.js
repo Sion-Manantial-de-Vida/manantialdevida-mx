@@ -58,19 +58,45 @@
     }).join('');
   })();
 
-  /* --- VIDEO EN VIVO (embed del canal de YouTube) --- */
+  /* --- VIDEO EN VIVO ---
+     Durante los servicios (domingo/miércoles) incrusta el directo del canal.
+     El resto del tiempo muestra una imagen del canal con botón (sin avisos de error). */
   (function liveVideo() {
-    var v = ((site.content && site.content['trans.liveChannel']) || '').trim();
+    var content = site.content || {};
+    var ch = (content['trans.liveChannel'] || '').trim();
+    var cover = (content['trans.coverImg'] || '').trim();
     var frame = document.querySelector('#transmisiones .video-frame');
-    if (!v || !frame) return;
-    var src;
-    if (/^UC[\w-]{20,}$/.test(v)) {
-      src = 'https://www.youtube.com/embed/live_stream?channel=' + encodeURIComponent(v);
-    } else {
-      var m = v.match(/(?:v=|youtu\.be\/|embed\/|live\/)([\w-]{11})/);
-      src = 'https://www.youtube.com/embed/' + (m ? m[1] : v);
+    if (!frame) return;
+    var esUC = /^UC[\w-]{20,}$/.test(ch);
+    var liveUrl = esUC ? 'https://www.youtube.com/channel/' + ch + '/live' : 'https://www.youtube.com/@iglesiasionmanantialdevida/live';
+
+    function parseHM(t) { if (!t) return null; var p = String(t).split(':'); return (+p[0]) * 60 + (+(p[1] || 0)); }
+    function enVivoAhora() {
+      var DAYW = { 'Domingo': 0, 'Miércoles': 3 };
+      var svc = (site.servicios || []).filter(function (s) { return s.activo !== false && (s.dia === 'Domingo' || s.dia === 'Miércoles'); });
+      var now = new Date(); var dow = now.getDay(); var mins = now.getHours() * 60 + now.getMinutes();
+      for (var i = 0; i < svc.length; i++) {
+        var s = svc[i]; if (DAYW[s.dia] !== dow) continue;
+        var ini = parseHM(s.ini); if (ini == null) continue;
+        var fin = parseHM(s.fin);
+        if (mins >= ini - 10 && mins <= (fin != null ? fin : ini + 120) + 30) return true;
+      }
+      return false;
     }
-    frame.style.position = 'relative';
-    frame.innerHTML = '<iframe src="' + src + '" title="Transmisión en vivo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:inherit"></iframe>';
+
+    if (ch && enVivoAhora()) {
+      var src = esUC ? 'https://www.youtube.com/embed/live_stream?channel=' + encodeURIComponent(ch)
+        : 'https://www.youtube.com/embed/' + (function () { var m = ch.match(/(?:v=|youtu\.be\/|embed\/|live\/)([\w-]{11})/); return m ? m[1] : ch; })();
+      frame.style.position = 'relative';
+      frame.innerHTML = '<iframe src="' + src + '" title="Transmisión en vivo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:inherit"></iframe>';
+    } else if (cover) {
+      frame.style.position = 'relative';
+      frame.innerHTML = '<a href="' + esc(liveUrl) + '" target="_blank" rel="noopener" aria-label="Ver el canal de YouTube" '
+        + 'style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;border-radius:inherit;text-decoration:none;background:linear-gradient(135deg,#19274E,#0e1730)">'
+        + '<img src="' + esc(cover) + '" alt="Canal de YouTube de la iglesia" style="width:92px;height:92px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.85)" />'
+        + '<span style="color:#fff;font-weight:600;font-size:1.02rem;text-align:center;padding:0 18px">Míranos en nuestro canal de YouTube</span>'
+        + '<span style="display:inline-flex;align-items:center;gap:8px;background:#fff;color:#19274E;font-weight:700;padding:9px 18px;border-radius:999px"><svg viewBox="0 0 24 24" width="16" height="16" fill="#19274E"><path d="M8 5v14l11-7z"/></svg>Ver canal</span>'
+        + '</a>';
+    }
   })();
 })();

@@ -475,15 +475,18 @@
   function fillTransCfg() {
     if ($('#cfgLiveChannel')) $('#cfgLiveChannel').value = data.content['trans.liveChannel'] || '';
     if ($('#cfgBtnCanal')) $('#cfgBtnCanal').value = data.content['trans.btnCanal'] || '';
+    if ($('#cfgCoverImg')) $('#cfgCoverImg').value = data.content['trans.coverImg'] || '';
   }
   fillTransCfg();
   if ($('#cfgTransSave')) $('#cfgTransSave').addEventListener('click', () => {
     data.content['trans.liveChannel'] = $('#cfgLiveChannel').value.trim();
     data.content['trans.btnCanal'] = $('#cfgBtnCanal').value.trim() || 'Ver canal de Youtube';
+    data.content['trans.coverImg'] = $('#cfgCoverImg').value.trim();
     persist();
     if (window.sbClient) window.sbClient.from('content').upsert([
       { key: 'trans.liveChannel', value: data.content['trans.liveChannel'] },
-      { key: 'trans.btnCanal', value: data.content['trans.btnCanal'] }
+      { key: 'trans.btnCanal', value: data.content['trans.btnCanal'] },
+      { key: 'trans.coverImg', value: data.content['trans.coverImg'] }
     ]).then(r => { if (r.error) console.warn('[Sion] config transmisiones:', r.error.message); });
     toast('Configuración guardada · visible en el sitio', 'ok');
   });

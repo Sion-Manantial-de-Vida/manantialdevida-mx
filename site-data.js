@@ -61,6 +61,7 @@
       'trans.msgSub': 'Explora por series, temas o predicador.',
       'trans.btnCanal': 'Ver canal de Youtube',
       'trans.liveChannel': '',
+      'trans.coverImg': '',
       'serv.eyebrow': 'Acompáñanos', 'serv.titulo': 'Nuestros servicios', 'serv.lead': 'Reúnete con nuestra familia esta semana. Ven tal como eres; aquí hay un lugar para ti.',
       'nosotros.eyebrow': 'Quiénes Somos', 'nosotros.titulo': 'Una comunidad centrada en Cristo y en las personas',
       'valores.eyebrow': 'Lo que nos sostiene', 'valores.titulo': 'Valores Fundamentales',
