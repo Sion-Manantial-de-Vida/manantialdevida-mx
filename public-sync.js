@@ -3,13 +3,25 @@
    - Otras secciones: del "paquete" site_data (paso intermedio).
    - Secciones normalizadas (fuente de verdad, tablas):
        eventos → events, anuncios → announcements, blog → blog_posts,
-       redes → social_feed, servicios → services, sermones → sermons.
-   Si algo cambió respecto a lo cacheado, refresca la página una sola
-   vez. Si Supabase no responde, el sitio sigue funcionando.
+       redes → social_feed, servicios → services, sermones → sermons,
+       textos → content.
+   Detecta cambios reales en la base de datos (huella determinista) y
+   refresca el sitio cuando hay novedades — sin bucles infinitos.
    ============================================================ */
 (function () {
   'use strict';
   if (!window.sbClient || !window.SionSite) return;
+
+  function stableSnap(base) {
+    const pick = ['eventos', 'anuncios', 'blog', 'social', 'servicios', 'sermones'];
+    const o = {};
+    pick.forEach(k => {
+      o[k] = (base[k] || []).slice().sort((a, b) => String(a.id).localeCompare(String(b.id)));
+    });
+    const c = base.content || {};
+    o.content = Object.keys(c).sort().map(k => [k, c[k]]);
+    return JSON.stringify(o);
+  }
 
   (async function sync() {
     const base = window.SionSite.load(); // por defecto + caché local
@@ -22,7 +34,7 @@
       }
     } catch (e) {}
 
-    // Secciones normalizadas: [tabla, clave en el objeto, función de mapeo opcional]
+    // Secciones normalizadas: [tabla, clave, función de mapeo opcional]
     const tablas = [
       ['events', 'eventos', r => ({ id: r.id, titulo: r.titulo, fecha: r.fecha, hora: r.hora, lugar: r.lugar, desc: r.descripcion, estado: r.estado, reg: !!r.reg })],
       ['announcements', 'anuncios', null],
@@ -48,15 +60,13 @@
       }
     } catch (e) {}
 
-    // Si cambió respecto a lo cacheado, guardar y refrescar una vez
+    // Guardar siempre en caché; refrescar solo si los datos de la BD cambiaron
     try {
-      const str = JSON.stringify(base);
-      if (str !== localStorage.getItem(window.SionSite.KEY)) {
-        localStorage.setItem(window.SionSite.KEY, str);
-        if (!sessionStorage.getItem('sionSyncedOnce')) {
-          sessionStorage.setItem('sionSyncedOnce', '1');
-          location.reload();
-        }
+      localStorage.setItem(window.SionSite.KEY, JSON.stringify(base));
+      const snap = stableSnap(base);
+      if (sessionStorage.getItem('sionDataVer') !== snap) {
+        sessionStorage.setItem('sionDataVer', snap);
+        location.reload();
       }
     } catch (e) {}
   })();

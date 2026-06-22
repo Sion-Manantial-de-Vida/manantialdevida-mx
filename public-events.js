@@ -18,11 +18,18 @@
   const parseY = (s) => { const p = (s || '').split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); };
   const fmtLong = (d) => `${d.getDate()} de ${MESL[d.getMonth()].toLowerCase()}, ${d.getFullYear()}`;
 
-  // Servicios recurrentes — siempre marcados en calendario y tarjetas
-  const SERVICIOS = [
-    { titulo: 'Servicio General', weekday: 0, hora: '11:00 AM', lugar: 'Templo principal', desc: 'Nuestra reunión principal: alabanza, Palabra y ministerio para toda la familia.', servicio: true },
-    { titulo: 'Estudio Bíblico', weekday: 3, hora: '7:30 PM', lugar: 'Templo principal', desc: 'Un alto a media semana para orar y crecer juntos en la Palabra.', servicio: true },
-  ];
+  // Servicios recurrentes (Domingo y Miércoles) — desde los servicios reales del sitio.
+  const DAYW = { 'Domingo': 0, 'Lunes': 1, 'Martes': 2, 'Miércoles': 3, 'Jueves': 4, 'Viernes': 5, 'Sábado': 6 };
+  function hora12(t) { if (!t) return ''; const p = String(t).split(':'); let h = +p[0]; const m = p[1] || '00'; const ap = h < 12 ? 'AM' : 'PM'; h = h % 12; if (h === 0) h = 12; return h + ':' + m + ' ' + ap; }
+  let SERVICIOS = (site.servicios || [])
+    .filter(s => s.activo !== false && (s.dia === 'Domingo' || s.dia === 'Miércoles'))
+    .map(s => ({ titulo: s.nombre, weekday: DAYW[s.dia], hora: hora12(s.ini), lugar: 'Templo principal', desc: '', servicio: true }));
+  if (!SERVICIOS.length) {
+    SERVICIOS = [
+      { titulo: 'Servicio General', weekday: 0, hora: '11:00 AM', lugar: 'Templo principal', desc: 'Nuestra reunión principal.', servicio: true },
+      { titulo: 'Estudio Bíblico', weekday: 3, hora: '7:30 PM', lugar: 'Templo principal', desc: 'Un alto a media semana.', servicio: true },
+    ];
+  }
   const eventos = (site.eventos || []).filter(e => e.estado === 'proximo')
     .map(e => ({ titulo: e.titulo, date: parseY(e.fecha), hora: e.hora, lugar: e.lugar, desc: e.desc, reg: e.reg, servicio: false }))
     .sort((a, b) => a.date - b.date);
