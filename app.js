@@ -247,6 +247,15 @@
           });
         } catch (err) { console.warn('[Sion] No se pudo guardar la petición:', err); }
       }
+      // Avisar por correo a la iglesia (no bloquea el agradecimiento)
+      try {
+        fetch('/api/prayer', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
+          tipo: tipoEl ? tipoEl.value : 'peticion',
+          nombre: name.value.trim(),
+          contacto: contactoEl ? contactoEl.value.trim() : '',
+          mensaje: msg.value.trim()
+        }) });
+      } catch (e) {}
       form.style.display = 'none';
       success.classList.add('show');
     });
