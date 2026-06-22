@@ -999,6 +999,7 @@
         if (typeof fillInfoForm === 'function') fillInfoForm();
         if (typeof fillTransCfg === 'function') fillTransCfg();
         if (typeof fillFeCfg === 'function') fillFeCfg();
+        renderDashboard();
       }
     } catch (e) {}
   })();
