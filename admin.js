@@ -96,7 +96,7 @@
     dashboard: ['Dashboard', 'Resumen general de la iglesia'],
     info: ['Información de la Iglesia', 'Edita la información que se muestra en el sitio'],
     horarios: ['Horarios de servicios', 'Gestiona los servicios semanales'],
-    sermones: ['Sermones', 'Administra los mensajes publicados'],
+    sermones: ['Transmisiones en vivo', 'Video en vivo, botón y mensajes anteriores del canal'],
     eventos: ['Eventos', 'Crea y gestiona los eventos de la iglesia'],
     anuncios: ['Anuncios destacados', 'Anuncios que aparecen en el sitio público'],
     blog: ['Devocionales y Blog', 'Publicaciones que aparecen en “Aprende con nosotros”'],
@@ -470,6 +470,23 @@
   }
   $('#addSerm').addEventListener('click', () => openSermForm(null));
   ['sermSearch', 'sermSerie', 'sermPred'].forEach(id => $('#' + id).addEventListener('input', renderSermones));
+
+  /* ---------- Transmisiones: video en vivo + texto del botón ---------- */
+  function fillTransCfg() {
+    if ($('#cfgLiveChannel')) $('#cfgLiveChannel').value = data.content['trans.liveChannel'] || '';
+    if ($('#cfgBtnCanal')) $('#cfgBtnCanal').value = data.content['trans.btnCanal'] || '';
+  }
+  fillTransCfg();
+  if ($('#cfgTransSave')) $('#cfgTransSave').addEventListener('click', () => {
+    data.content['trans.liveChannel'] = $('#cfgLiveChannel').value.trim();
+    data.content['trans.btnCanal'] = $('#cfgBtnCanal').value.trim() || 'Ver canal de Youtube';
+    persist();
+    if (window.sbClient) window.sbClient.from('content').upsert([
+      { key: 'trans.liveChannel', value: data.content['trans.liveChannel'] },
+      { key: 'trans.btnCanal', value: data.content['trans.btnCanal'] }
+    ]).then(r => { if (r.error) console.warn('[Sion] config transmisiones:', r.error.message); });
+    toast('Configuración guardada · visible en el sitio', 'ok');
+  });
 
   /* ============================================================
      EVENTOS
@@ -885,6 +902,7 @@
       if (!ct.error && Array.isArray(ct.data) && ct.data.length) {
         ct.data.forEach(r => { data.content[r.key] = r.value; });
         if (typeof fillInfoForm === 'function') fillInfoForm();
+        if (typeof fillTransCfg === 'function') fillTransCfg();
       }
     } catch (e) {}
   })();

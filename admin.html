@@ -29,8 +29,8 @@
       Horarios
     </button>
     <button class="sb-link" data-view="sermones">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 5h12v14H3z"/><path d="M15 7h6v10h-6"/><path d="M7 9h4M7 13h4"/></svg>
-      Sermones
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M10 9l5 3-5 3z"/></svg>
+      Transmisiones en vivo
     </button>
     <button class="sb-link" data-view="eventos">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>
@@ -351,6 +351,16 @@
 
     <!-- ============ SERMONES ============ -->
     <section class="view" id="view-sermones">
+      <div class="card card-pad" style="margin-bottom:18px;">
+        <h3 class="sec-title" style="margin-bottom:6px;">Video en vivo</h3>
+        <p class="muted" style="font-size:.85rem; margin-bottom:14px;">Pega el <strong>ID del canal</strong> de YouTube (empieza con <code>UC…</code>). Cuando la iglesia transmita en vivo, el video aparecerá solo en el sitio; si no hay transmisión, YouTube muestra un aviso. <a href="https://www.youtube.com/account_advanced" target="_blank" rel="noopener">¿Dónde encuentro el ID?</a></p>
+        <div class="grid-2">
+          <div class="field"><label>ID del canal de YouTube</label><input id="cfgLiveChannel" placeholder="UCxxxxxxxxxxxxxxxxxxxxxx" /></div>
+          <div class="field"><label>Texto del botón de YouTube</label><input id="cfgBtnCanal" placeholder="Ver canal de Youtube" /></div>
+        </div>
+        <button type="button" class="btn btn-cta" id="cfgTransSave"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5 9-11"/></svg>Guardar configuración</button>
+      </div>
+      <h3 class="sec-title" style="margin-bottom:10px;">Mensajes anteriores (videos del canal)</h3>
       <div class="toolbar">
         <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="sermSearch" placeholder="Buscar por título…" /></div>
         <select class="filter-select" id="sermSerie"><option value="">Todas las series</option></select>

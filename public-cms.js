@@ -57,4 +57,20 @@
         + '<div class="pr">' + pr + '</div></div></a>';
     }).join('');
   })();
+
+  /* --- VIDEO EN VIVO (embed del canal de YouTube) --- */
+  (function liveVideo() {
+    var v = ((site.content && site.content['trans.liveChannel']) || '').trim();
+    var frame = document.querySelector('#transmisiones .video-frame');
+    if (!v || !frame) return;
+    var src;
+    if (/^UC[\w-]{20,}$/.test(v)) {
+      src = 'https://www.youtube.com/embed/live_stream?channel=' + encodeURIComponent(v);
+    } else {
+      var m = v.match(/(?:v=|youtu\.be\/|embed\/|live\/)([\w-]{11})/);
+      src = 'https://www.youtube.com/embed/' + (m ? m[1] : v);
+    }
+    frame.style.position = 'relative';
+    frame.innerHTML = '<iframe src="' + src + '" title="Transmisión en vivo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:inherit"></iframe>';
+  })();
 })();
