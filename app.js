@@ -33,6 +33,16 @@
       const key = el.getAttribute('data-content-mail');
       if (c[key]) { el.textContent = c[key]; el.setAttribute('href', 'mailto:' + c[key]); }
     });
+    // teléfono (texto + tel:) y WhatsApp (wa.me) — normaliza a formato MX (+52)
+    const telNorm = (s) => { let d = String(s == null ? '' : s).replace(/\D/g, ''); if (d && d.indexOf('52') !== 0) d = '52' + d; return d; };
+    document.querySelectorAll('[data-content-tel]').forEach(el => {
+      const key = el.getAttribute('data-content-tel');
+      if (c[key]) { el.textContent = c[key]; el.setAttribute('href', 'tel:+' + telNorm(c[key])); }
+    });
+    document.querySelectorAll('[data-content-wa]').forEach(el => {
+      const key = el.getAttribute('data-content-wa');
+      if (c[key]) el.setAttribute('href', 'https://wa.me/' + telNorm(c[key]));
+    });
 
     const escA = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]));
 
