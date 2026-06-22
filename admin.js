@@ -248,9 +248,10 @@
       ann: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l16-7v16L3 13z"/></svg>',
       give: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>',
     };
-    $('#activityList').innerHTML = data.actividad.map(a =>
-      `<div class="act-item"><span class="act-dot">${icos[a.ico] || ''}</span><div><div class="t">${a.t}</div><div class="ts">${esc(a.ts)}</div></div></div>`
-    ).join('');
+    const _act = data.actividad || [];
+    $('#activityList').innerHTML = _act.length ? _act.map(a =>
+      `<div class="act-item"><span class="act-dot">${icos[a.ico] || ''}</span><div><div class="t">${esc(a.t)}</div><div class="ts">${esc(a.ts)}</div></div></div>`
+    ).join('') : '<p class="muted" style="font-size:.9rem; padding:6px 2px;">Aún no hay actividad reciente.</p>';
   }
 
   /* ============================================================
@@ -999,6 +1000,41 @@
         if (typeof fillTransCfg === 'function') fillTransCfg();
         if (typeof fillFeCfg === 'function') fillFeCfg();
       }
+    } catch (e) {}
+  })();
+
+  // 1f) Arma la "Actividad reciente" real combinando las últimas filas de cada tabla.
+  (async function loadActivityRemote() {
+    if (!window.sbClient) return;
+    function hace(iso) {
+      var d = new Date(iso); if (isNaN(d)) return '';
+      var sec = (Date.now() - d.getTime()) / 1000;
+      if (sec < 60) return 'Hace un momento';
+      if (sec < 3600) { var m = Math.floor(sec / 60); return 'Hace ' + m + (m === 1 ? ' minuto' : ' minutos'); }
+      if (sec < 86400) { var h = Math.floor(sec / 3600); return 'Hace ' + h + (h === 1 ? ' hora' : ' horas'); }
+      var dd = Math.floor(sec / 86400);
+      if (dd === 1) return 'Ayer';
+      if (dd < 7) return 'Hace ' + dd + ' días';
+      if (dd < 30) { var w = Math.floor(dd / 7); return 'Hace ' + w + (w === 1 ? ' semana' : ' semanas'); }
+      var mo = Math.floor(dd / 30); return 'Hace ' + mo + (mo === 1 ? ' mes' : ' meses');
+    }
+    var SRC = [
+      { tbl: 'prayer_requests', ico: 'msg', txt: function (r) { return (r.tipo === 'gracias' ? 'Nueva acción de gracias' : 'Nueva petición de oración') + (r.nombre ? ' de ' + r.nombre : ''); } },
+      { tbl: 'events', ico: 'cal', txt: function (r) { return 'Evento: ' + (r.titulo || ''); } },
+      { tbl: 'sermons', ico: 'play', txt: function (r) { return 'Sermón: «' + (r.titulo || '') + '»'; } },
+      { tbl: 'announcements', ico: 'ann', txt: function (r) { return 'Anuncio: ' + (r.titulo || ''); } },
+      { tbl: 'blog_posts', ico: 'msg', txt: function (r) { return 'Publicación: ' + (r.titulo || ''); } }
+    ];
+    try {
+      var results = await Promise.all(SRC.map(function (src) {
+        return window.sbClient.from(src.tbl).select('*').order('created_at', { ascending: false }).limit(5)
+          .then(function (res) { return (res && !res.error && Array.isArray(res.data)) ? res.data.map(function (r) { return { ico: src.ico, t: src.txt(r), ts: hace(r.created_at), at: r.created_at || '' }; }) : []; })
+          .catch(function () { return []; });
+      }));
+      var items = [].concat.apply([], results).filter(function (x) { return x.at; });
+      items.sort(function (a, b) { return a.at < b.at ? 1 : (a.at > b.at ? -1 : 0); });
+      data.actividad = items.slice(0, 6);
+      renderActivity();
     } catch (e) {}
   })();
 
