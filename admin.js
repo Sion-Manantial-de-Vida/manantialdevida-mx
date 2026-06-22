@@ -361,6 +361,7 @@
      HORARIOS
      ============================================================ */
   function renderHorarios() {
+    renderDashboard();
     const ORDER = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
     const byDay = ORDER.filter(d => data.horarios.some(h => h.dia === d));
     const editIco = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>';
@@ -418,6 +419,7 @@
   const fmtDate = (d) => { if (!d) return ''; const [y, m, day] = d.split('-'); const mes = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic']; return `${day} ${mes[+m - 1]} ${y}`; };
 
   function renderSermones() {
+    renderDashboard();
     const series = [...new Set(data.sermones.map(s => s.serie))];
     const preds = [...new Set(data.sermones.map(s => s.pred))];
     $('#sermSerie').innerHTML = '<option value="">Todas las series</option>' + series.map(s => `<option>${esc(s)}</option>`).join('');
@@ -535,6 +537,7 @@
     } catch (e) {}
   }
   function renderEventos() {
+    renderDashboard();
     const q = $('#evtSearch').value.toLowerCase(), fe = $('#evtEstado').value;
     const list = data.eventos.filter(e => (!q || e.titulo.toLowerCase().includes(q)) && (!fe || e.estado === fe));
     const wrap = $('#evtList');
@@ -588,6 +591,7 @@
      ANUNCIOS
      ============================================================ */
   function renderAnuncios() {
+    renderDashboard();
     $('#annList').innerHTML = data.anuncios.sort((a, b) => a.orden - b.orden).map(a => `
       <div class="list-row">
         <div class="list-thumb"${a.img ? ` style="background-image:url('${esc(a.img)}');background-size:cover;background-position:center;"` : ' style="background:var(--sand-soft);color:var(--sand-deep);"'}>${a.img ? '' : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 11l16-7v16L3 13z"/></svg>'}</div>
@@ -798,6 +802,7 @@
     if (n) { b.textContent = n; b.style.display = ''; } else b.style.display = 'none';
   }
   function renderPeticiones() {
+    renderDashboard();
     const q = $('#reqSearch').value.toLowerCase(), f = $('#reqFilter').value;
     const list = data.peticiones.filter(p => (!q || p.msg.toLowerCase().includes(q) || p.nombre.toLowerCase().includes(q)) && (!f || p.estado === f));
     const wrap = $('#reqList');
@@ -842,6 +847,70 @@
   }
 
   /* ============================================================
+     DASHBOARD (resumen real desde los datos cargados)
+     ============================================================ */
+  function enHorarioServicio() {
+    var DAYW = { 'Domingo': 0, 'Miércoles': 3 };
+    var now = new Date(); var dow = now.getDay(); var mins = now.getHours() * 60 + now.getMinutes();
+    return (data.horarios || []).some(function (h) {
+      if (h.activo === false || DAYW[h.dia] !== dow) return false;
+      var p = String(h.ini || '').split(':'); if (!p[0]) return false;
+      var ini = (+p[0]) * 60 + (+(p[1] || 0));
+      var pf = String(h.fin || '').split(':'); var fin = pf[0] ? (+pf[0]) * 60 + (+(pf[1] || 0)) : ini + 120;
+      return mins >= ini - 10 && mins <= fin + 30;
+    });
+  }
+  function proximoServicio() {
+    var ORDER = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    var act = (data.horarios || []).filter(function (h) { return h.activo !== false && h.dia && h.ini; });
+    if (!act.length) return null;
+    var now = new Date(); var dow = now.getDay(); var mins = now.getHours() * 60 + now.getMinutes();
+    var best = null;
+    act.forEach(function (h) {
+      var d = ORDER.indexOf(h.dia); if (d < 0) return;
+      var p = String(h.ini).split(':'); var hm = (+p[0]) * 60 + (+(p[1] || 0));
+      var delta = ((d - dow + 7) % 7) * 1440 + (hm - mins); if (delta < 0) delta += 7 * 1440;
+      if (best === null || delta < best.delta) best = { delta: delta, h: h };
+    });
+    if (!best) return null;
+    var p = String(best.h.ini).split(':'); var hh = +p[0]; var mm = p[1] || '00';
+    var h12 = hh % 12; if (h12 === 0) h12 = 12;
+    return { label: best.h.dia.slice(0, 3) + ' ' + h12 + ':' + mm, nombre: best.h.nombre || 'Servicio' };
+  }
+  function renderDashboard() {
+    var setTxt = function (sel, val) { var e = $(sel); if (e) e.textContent = val; };
+    var hoy = new Date(); hoy.setHours(0, 0, 0, 0);
+    setTxt('#statSermones', (data.sermones || []).length);
+    var prox = (data.eventos || []).filter(function (e) { if (!e.fecha) return false; var d = new Date(e.fecha + 'T00:00:00'); return !isNaN(d) && d >= hoy; });
+    setTxt('#statEventos', prox.length);
+    var pet = (data.peticiones || []);
+    setTxt('#statPeticiones', pet.length);
+    var nuevas = pet.filter(function (x) { return (x.estado || 'nueva') === 'nueva'; }).length;
+    var tag = $('#statPetTag');
+    if (tag) { if (nuevas > 0) { tag.style.display = ''; tag.innerHTML = '<span class="dot"></span>' + nuevas + (nuevas === 1 ? ' nueva' : ' nuevas'); } else { tag.style.display = 'none'; } }
+    var nx = proximoServicio();
+    if (nx) { setTxt('#statNextSvc', nx.label); setTxt('#statNextSvcLbl', 'Próximo servicio · ' + nx.nombre); }
+    var con = $('#stConexion');
+    if (con) {
+      if (location.protocol === 'https:') { con.className = 'pill pill-green'; con.innerHTML = '<span class="dot"></span>HTTPS activo'; }
+      else { con.className = 'pill pill-amber'; con.textContent = 'Sin HTTPS'; }
+    }
+    var tr = $('#stTransmision');
+    if (tr) {
+      var ch = ((data.content && data.content['trans.liveChannel']) || '').trim();
+      if (ch && enHorarioServicio()) { tr.className = 'pill pill-green'; tr.innerHTML = '<span class="dot"></span>En vivo ahora'; }
+      else if (ch) { tr.className = 'pill pill-navy'; tr.textContent = 'Programada'; }
+      else { tr.className = 'pill pill-slate'; tr.textContent = 'Sin configurar'; }
+    }
+    var an = $('#stAnuncio');
+    if (an) {
+      var actA = (data.anuncios || []).filter(function (a) { return a.activo; }).length;
+      an.className = actA > 0 ? 'pill pill-amber' : 'pill pill-slate';
+      an.textContent = actA > 0 ? (actA + (actA === 1 ? ' activo' : ' activos')) : 'Ninguno';
+    }
+  }
+
+  /* ============================================================
      INIT
      ============================================================ */
   renderActivity();
@@ -854,6 +923,7 @@
   renderPeticiones();
   renderBlog();
   renderSocial();
+  renderDashboard();
 
   /* ============================================================
      CARGA DESDE LA NUBE (Supabase)
