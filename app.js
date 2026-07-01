@@ -53,7 +53,7 @@
       const setMap = (src) => { if (src && mapFrame.getAttribute('src') !== src) mapFrame.setAttribute('src', src); };
       const toEmbed = (u) => {
         let m; const nm = u.match(/\/place\/([^/@]+)/); const name = nm ? decodeURIComponent(nm[1]).replace(/\+/g, ' ') : '';
-        const cq = (a, b) => 'https://www.google.com/maps?q=' + encodeURIComponent(a + ',' + b + (name ? '(' + name + ')' : '')) + '&output=embed';
+        const cq = (a, b) => 'https://www.google.com/maps?q=' + a + ',' + b + '&output=embed';
         if ((m = u.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/))) return cq(m[1], m[2]);
         if ((m = u.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/))) return cq(m[1], m[2]);
         if ((m = u.match(/[?&]q=([^&]+)/))) return 'https://www.google.com/maps?q=' + m[1] + '&output=embed';
@@ -65,7 +65,7 @@
         const direct = toEmbed(link);
         if (direct) { setMap(direct); }
         else {
-          const ck = 'mapEmbed3:' + link;
+          const ck = 'mapEmbed4:' + link;
           let cached = null; try { cached = localStorage.getItem(ck); } catch (e) {}
           if (cached) setMap(cached);
           else fetch('/api/mapembed?url=' + encodeURIComponent(link)).then(r => r.json()).then(d => {
