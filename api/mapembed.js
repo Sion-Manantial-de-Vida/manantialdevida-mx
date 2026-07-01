@@ -6,7 +6,7 @@
    navegador (CORS); por eso se resuelven aquí en el servidor.
    ============================================================ */
 function coord(a, b, name) {
-  const query = a + ',' + b + (name ? ' (' + name + ')' : ''); // (Nombre) etiqueta el pin
+  const query = a + ',' + b + (name ? '(' + name + ')' : ''); // (Nombre) etiqueta el pin
   return 'https://www.google.com/maps?q=' + encodeURIComponent(query) + '&output=embed';
 }
 function q(s) { return 'https://www.google.com/maps?q=' + encodeURIComponent(s) + '&output=embed'; }
