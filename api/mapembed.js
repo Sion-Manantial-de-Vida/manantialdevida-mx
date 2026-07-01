@@ -5,15 +5,19 @@
    visita". Los enlaces cortos no se pueden resolver desde el
    navegador (CORS); por eso se resuelven aquí en el servidor.
    ============================================================ */
-function coord(a, b) { return 'https://www.google.com/maps?q=' + a + ',' + b + '&output=embed'; }
+function coord(a, b, name) {
+  const query = a + ',' + b + (name ? ' (' + name + ')' : ''); // (Nombre) etiqueta el pin
+  return 'https://www.google.com/maps?q=' + encodeURIComponent(query) + '&output=embed';
+}
 function q(s) { return 'https://www.google.com/maps?q=' + encodeURIComponent(s) + '&output=embed'; }
 function toEmbed(u) {
-  let m;
-  if ((m = u.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/))) return coord(m[1], m[2]); // pin exacto del lugar
-  if ((m = u.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/))) return coord(m[1], m[2]);     // centro del mapa
+  let m, name = null, mn;
+  if ((mn = u.match(/\/place\/([^/@]+)/))) name = decodeURIComponent(mn[1]).replace(/\+/g, ' ');
+  if ((m = u.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/))) return coord(m[1], m[2], name); // pin exacto del lugar
+  if ((m = u.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/))) return coord(m[1], m[2], name);     // centro del mapa
   if ((m = u.match(/[?&]q=([^&]+)/))) return q(decodeURIComponent(m[1]));
   if ((m = u.match(/[?&]destination=([^&]+)/))) return q(decodeURIComponent(m[1]));
-  if ((m = u.match(/\/place\/([^/@]+)/))) return q(decodeURIComponent(m[1]).replace(/\+/g, ' '));
+  if (name) return q(name);
   return null;
 }
 
