@@ -44,6 +44,36 @@
       if (c[key]) el.setAttribute('href', 'https://wa.me/' + telNorm(c[key]));
     });
 
+    /* ---- Mapa de "Planifica tu visita": el mapa incrustado sigue el mismo
+       enlace de Google Maps (visita.maps). Enlaces largos se transforman aquí;
+       los cortos (maps.app.goo.gl) se resuelven vía /api/mapembed y se cachean. ---- */
+    const mapFrame = document.getElementById('visitaMap');
+    if (mapFrame) {
+      const link = (c['visita.maps'] || '').trim();
+      const setMap = (src) => { if (src && mapFrame.getAttribute('src') !== src) mapFrame.setAttribute('src', src); };
+      const toEmbed = (u) => {
+        let m;
+        if ((m = u.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/))) return 'https://www.google.com/maps?q=' + m[1] + ',' + m[2] + '&output=embed';
+        if ((m = u.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/))) return 'https://www.google.com/maps?q=' + m[1] + ',' + m[2] + '&output=embed';
+        if ((m = u.match(/[?&]q=([^&]+)/))) return 'https://www.google.com/maps?q=' + m[1] + '&output=embed';
+        if ((m = u.match(/[?&]destination=([^&]+)/))) return 'https://www.google.com/maps?q=' + m[1] + '&output=embed';
+        if ((m = u.match(/\/place\/([^/@]+)/))) return 'https://www.google.com/maps?q=' + encodeURIComponent(decodeURIComponent(m[1]).replace(/\+/g, ' ')) + '&output=embed';
+        return null;
+      };
+      if (link) {
+        const direct = toEmbed(link);
+        if (direct) { setMap(direct); }
+        else {
+          const ck = 'mapEmbed:' + link;
+          let cached = null; try { cached = localStorage.getItem(ck); } catch (e) {}
+          if (cached) setMap(cached);
+          else fetch('/api/mapembed?url=' + encodeURIComponent(link)).then(r => r.json()).then(d => {
+            if (d && d.embed) { try { localStorage.setItem(ck, d.embed); } catch (e) {} setMap(d.embed); }
+          }).catch(() => {});
+        }
+      }
+    }
+
     const escA = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]));
 
     /* ---- Foto de pastores (imagen + tamaño) ---- */
