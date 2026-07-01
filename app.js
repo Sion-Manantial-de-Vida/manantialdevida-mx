@@ -65,7 +65,7 @@
         const direct = toEmbed(link);
         if (direct) { setMap(direct); }
         else {
-          const ck = 'mapEmbed2:' + link;
+          const ck = 'mapEmbed3:' + link;
           let cached = null; try { cached = localStorage.getItem(ck); } catch (e) {}
           if (cached) setMap(cached);
           else fetch('/api/mapembed?url=' + encodeURIComponent(link)).then(r => r.json()).then(d => {
