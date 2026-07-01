@@ -51,21 +51,21 @@
     if (mapFrame) {
       const link = (c['visita.maps'] || '').trim();
       const setMap = (src) => { if (src && mapFrame.getAttribute('src') !== src) mapFrame.setAttribute('src', src); };
+      const emb = (s) => 'https://www.google.com/maps?q=' + encodeURIComponent(s) + '&output=embed';
       const toEmbed = (u) => {
-        let m; const nm = u.match(/\/place\/([^/@]+)/); const name = nm ? decodeURIComponent(nm[1]).replace(/\+/g, ' ') : '';
-        const cq = (a, b) => 'https://www.google.com/maps?q=' + a + ',' + b + '&output=embed';
-        if ((m = u.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/))) return cq(m[1], m[2]);
-        if ((m = u.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/))) return cq(m[1], m[2]);
+        let m;
+        if ((m = u.match(/\/place\/([^/@]+)/))) return emb(decodeURIComponent(m[1]).replace(/\+/g, ' '));
         if ((m = u.match(/[?&]q=([^&]+)/))) return 'https://www.google.com/maps?q=' + m[1] + '&output=embed';
         if ((m = u.match(/[?&]destination=([^&]+)/))) return 'https://www.google.com/maps?q=' + m[1] + '&output=embed';
-        if (name) return 'https://www.google.com/maps?q=' + encodeURIComponent(name) + '&output=embed';
+        if ((m = u.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/))) return 'https://www.google.com/maps?q=' + m[1] + ',' + m[2] + '&output=embed';
+        if ((m = u.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/))) return 'https://www.google.com/maps?q=' + m[1] + ',' + m[2] + '&output=embed';
         return null;
       };
       if (link) {
         const direct = toEmbed(link);
         if (direct) { setMap(direct); }
         else {
-          const ck = 'mapEmbed4:' + link;
+          const ck = 'mapEmbed5:' + link;
           let cached = null; try { cached = localStorage.getItem(ck); } catch (e) {}
           if (cached) setMap(cached);
           else fetch('/api/mapembed?url=' + encodeURIComponent(link)).then(r => r.json()).then(d => {
