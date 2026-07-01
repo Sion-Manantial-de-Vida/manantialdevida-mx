@@ -432,7 +432,7 @@
     if (!list.length) { wrap.innerHTML = emptyState('No hay sermones que coincidan.'); return; }
     wrap.innerHTML = list.map(s => `
       <div class="list-row">
-        <div class="list-thumb"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+        <div class="list-thumb"${s.img ? ` style="background-image:url('${esc(s.img)}');background-size:cover;background-position:center;"` : ''}>${s.img ? '' : '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>'}</div>
         <div class="list-body">
           <div class="meta">${esc(s.serie)} · ${fmtDate(s.fecha)}</div>
           <h4>${esc(s.titulo)}</h4>
@@ -462,15 +462,16 @@
         <div class="field"><label>Fecha</label><input name="fecha" type="date" value="${esc(s.fecha)}" /></div>
         <div class="field"><label>Link de YouTube</label><input name="yt" value="${esc(s.yt)}" placeholder="https://youtu.be/…" /></div>
       </div>
-      <div class="field"><label>Miniatura</label><div class="list-thumb" style="width:100%;height:120px;border-radius:10px;">Arrastra una imagen (demo)</div></div>
+      <div class="field"><label>Miniatura del sermón</label><div id="sermImgHolder">${imagePickerHTML('sermImg', s.img || '', { hint: 'JPG o PNG · se ve en la lista de mensajes' })}</div></div>
       <div class="field"><label>Descripción</label><textarea name="desc" placeholder="Breve resumen del mensaje">${esc(s.desc)}</textarea></div>
       <label class="field" style="flex-direction:row; align-items:center; gap:.7rem;"><label class="switch"><input type="checkbox" name="dest" ${s.dest ? 'checked' : ''}><span class="sl"></span></label><span style="font-weight:600;">Marcar como destacado</span></label>
     `, () => {
       const t = val('titulo'); if (!t) { toast('Escribe un título', 'warn'); return; }
-      const obj = { titulo: t, pred: val('pred'), serie: val('serie'), fecha: val('fecha'), yt: val('yt'), desc: val('desc'), dest: chk('dest') };
+      const obj = { titulo: t, pred: val('pred'), serie: val('serie'), fecha: val('fecha'), yt: val('yt'), desc: val('desc'), dest: chk('dest'), img: imgVal('sermImg') };
       let saved; if (id) { Object.assign(s, obj); saved = s; } else { saved = Object.assign({ id: 's' + Date.now() }, obj); data.sermones.unshift(saved); }
       sbUpsert('sermons', sermRow(saved)); renderSermones(); closeModal(formModal); toast('Sermón guardado', 'ok');
     });
+    wireImagePicker('sermImg');
   }
   $('#addSerm').addEventListener('click', () => openSermForm(null));
   ['sermSearch', 'sermSerie', 'sermPred'].forEach(id => $('#' + id).addEventListener('input', renderSermones));
@@ -527,7 +528,7 @@
   function sbUpsert(table, row) { if (window.sbClient) window.sbClient.from(table).upsert(row).then(r => { if (r.error) console.warn('[Sion] ' + table + ' no guardado:', r.error.message); }); }
   function sbDelete(table, id) { if (window.sbClient) window.sbClient.from(table).delete().eq('id', id).then(r => { if (r.error) console.warn('[Sion] ' + table + ' no borrado:', r.error.message); }); }
   // Sermones usan 'descripcion' en la tabla pero 'desc' en el panel.
-  function sermRow(s) { return { id: s.id, titulo: s.titulo, pred: s.pred, serie: s.serie, fecha: s.fecha, yt: s.yt, descripcion: s.desc, dest: !!s.dest }; }
+  function sermRow(s) { return { id: s.id, titulo: s.titulo, pred: s.pred, serie: s.serie, fecha: s.fecha, yt: s.yt, descripcion: s.desc, dest: !!s.dest, img: s.img || '' }; }
   async function loadEventsRemote() {
     if (!window.sbClient) return;
     try {
@@ -975,7 +976,7 @@
     try {
       const sm = await window.sbClient.from('sermons').select('*');
       if (!sm.error && Array.isArray(sm.data)) {
-        data.sermones = sm.data.map(r => ({ id: r.id, titulo: r.titulo, pred: r.pred, serie: r.serie, fecha: r.fecha, yt: r.yt, desc: r.descripcion, dest: !!r.dest }));
+        data.sermones = sm.data.map(r => ({ id: r.id, titulo: r.titulo, pred: r.pred, serie: r.serie, fecha: r.fecha, yt: r.yt, desc: r.descripcion, dest: !!r.dest, img: r.img || '' }));
         renderSermones();
       }
     } catch (e) {}

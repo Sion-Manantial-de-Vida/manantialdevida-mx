@@ -41,7 +41,7 @@
       ['blog_posts', 'blog', null],
       ['social_feed', 'social', null],
       ['services', 'servicios', null],
-      ['sermons', 'sermones', r => ({ id: r.id, titulo: r.titulo, pred: r.pred, serie: r.serie, fecha: r.fecha, yt: r.yt, desc: r.descripcion, dest: !!r.dest })],
+      ['sermons', 'sermones', r => ({ id: r.id, titulo: r.titulo, pred: r.pred, serie: r.serie, fecha: r.fecha, yt: r.yt, desc: r.descripcion, dest: !!r.dest, img: r.img || '' })],
       ['faith', 'fe', null]
     ];
     for (const [tabla, clave, mapFn] of tablas) {

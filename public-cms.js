@@ -52,7 +52,7 @@
       var meta = s.serie ? 'Serie · ' + esc(s.serie) : 'Mensaje';
       var pr = esc(s.pred || '') + (s.fecha ? ' · ' + fmtFecha(s.fecha) : '');
       return '<a class="msg-row reveal in" href="' + esc(href) + '"' + ext + '>'
-        + '<div class="ph msg-thumb" data-label="thumb"></div>'
+        + (s.img ? '<div class="msg-thumb" style="background-image:url(\'' + esc(s.img) + '\');background-size:cover;background-position:center;"></div>' : '<div class="ph msg-thumb" data-label="thumb"></div>')
         + '<div><div class="meta">' + meta + '</div><h4>' + esc(s.titulo) + '</h4>'
         + '<div class="pr">' + pr + '</div></div></a>';
     }).join('');

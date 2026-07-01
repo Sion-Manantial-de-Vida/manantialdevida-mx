@@ -32,6 +32,7 @@
       'contacto.dir': 'Av. Solidaridad Las Torres 1096, Madero, Metepec, Méx. C.P. 52172',
       'contacto.mail': 'sion@manantialdevida.mx',
       'contacto.tel': '55 7433 9562',
+      'visita.maps': 'https://www.google.com/maps/dir/?api=1&destination=Av.+Solidaridad+Las+Torres+1096,+Madero,+Metepec',
       'oracion.s1.t': 'Comparte tu petición', 'oracion.s1.d': 'Llena el formulario con lo que tienes en tu corazón. Puedes hacerlo de forma confidencial.',
       'oracion.s2.t': 'La recibe el equipo de intercesión', 'oracion.s2.d': 'Un grupo de personas dedicadas a orar recibe tu petición con respeto y cuidado.',
       'oracion.s3.t': 'Oramos por ti durante la semana', 'oracion.s3.d': 'Si lo deseas, un pastor te contactará para acompañarte de cerca.',
